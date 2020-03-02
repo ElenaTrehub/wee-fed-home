@@ -44,16 +44,16 @@
                             <th scope="col">Удаление из списка</th>
                             </thead>
                             <tbody>
-                                @php $i=0; $strArray =  explode(";", $recipe->recipeIngredients);@endphp
-                                @foreach ($strArray as $str)
-                                    @if($str !='')
+                                @php $i=0;@endphp
+                                @foreach ($ingredients as $ingredient)
+
                                         @php $i++;@endphp
                                         <tr>
                                             <td>@php echo($i);@endphp</td>
-                                            <td>@php printf("%s<br>", $str);@endphp</td>
+                                            <td>{{$ingredient->ingredient->titleIngredient}} - {{$ingredient->ingredient->count}} {{$ingredient->unit}}</td>
                                             <td><input data-index="@php echo($i);@endphp" type="button" value="Remove" onclick="deleteIngredient(this)" class="btn btn-danger"></td>
                                         </tr>
-                                    @endif
+
                                 @endforeach
 
                             </tbody>
@@ -61,7 +61,7 @@
 
 
 
-                        <input id="ingredients" value="{{$recipe->recipeIngredients}}"  class="form-control" name="ingredients">
+                        <input type="hidden" id="ingredients" value="{{$ingredStr}}"  class="form-control" name="ingredients">
 
                     </div>
                     <div class="form-group">

@@ -94,11 +94,11 @@
                 <div class="recipe-ratio">
                     <div class="recipe-like">
                         <img src={{asset('storage/uploads/like.png')}}>
-                        {{$recipe->recipe->like}}
+                        {{$recipe->likes}}
                     </div>
                     <div class="recipe-dislike">
                         <img src={{asset('storage/uploads/dislike.png')}}>
-                        {{$recipe->recipe->dislike}}
+                        {{$recipe->dislikes}}
                     </div>
                 </div>
             </div>
@@ -108,20 +108,5 @@
         <input id="showMore" onclick="showMoreRecipe()" value="Больше рецептов" class="btn btn-success">
     </div>
 </div>
-<script src="https://js.pusher.com/5.0/pusher.min.js"></script>
-<script>
 
-    // Enable pusher logging - don't include this in production
-    Pusher.logToConsole = true;
-
-    var pusher = new Pusher('122121212', {
-        cluster: 'eu',
-        forceTLS: true
-    });
-
-    var channel = pusher.subscribe('test');
-    channel.bind('NewMessageNotification', function(data) {
-        alert(JSON.stringify(data));
-    });
-</script>
 @endsection

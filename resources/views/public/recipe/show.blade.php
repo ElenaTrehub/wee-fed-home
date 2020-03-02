@@ -23,11 +23,11 @@
                             <div class="recipe-like">
                                 <a href="{{route('recipe-like', ['idRecipe' => $recipe->idRecipe])}}"><img src={{asset('storage/uploads/like.png')}}></a>
 
-                                {{$recipe->like}}
+                                {{$likes}}
                             </div>
                             <div class="recipe-dislike">
                                 <a href="{{route('recipe-dislike', ['idRecipe' => $recipe->idRecipe])}}"><img src={{asset('storage/uploads/dislike.png')}}></a>
-                                {{$recipe->dislike}}
+                                {{$dislikes}}
                             </div>
                         </div>
                     </div>
@@ -79,12 +79,9 @@
 
             <div class="single-recipe_ingredients">
                 <p class="main-title">Ингридиенты:</p>
-                @php $strArray =  explode(";", $recipe->recipeIngredients);
-
-                    foreach ($strArray as $str){
-                        printf("%s<br>", $str);
-                    }
-                @endphp
+                @foreach ($ingredients as $ingredient)
+                    <p>{{$ingredient->ingredient->titleIngredient}} - {{$ingredient->ingredient->count}} {{$ingredient->unit}}</p>
+                @endforeach
 
             </div>
             <div class="single-recipe_description">

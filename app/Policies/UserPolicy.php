@@ -28,4 +28,18 @@ class UserPolicy
         return $user->hasStatus(3) && $user->hasRole(1) || $user->hasStatus(3) && $user->hasRole(3);
         //});
     }
+
+    public function createDoctor(User $user){
+        return $user->hasStatus(3) && $user->hasRole(1);
+        //});
+    }
+    public function doctorList(User $user){
+        return $user->hasStatus(3) && $user->hasRole(1);
+        //});
+    }
+
+    public function admin(User $user){
+        return $user->hasStatus(3) && $user->hasRole(3);
+        //});
+    }
 }

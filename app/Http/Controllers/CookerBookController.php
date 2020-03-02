@@ -8,6 +8,7 @@ use App\Models\Recipe;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Config;
 
 class CookerBookController extends Controller
 {
@@ -17,8 +18,8 @@ class CookerBookController extends Controller
 
     public function __construct()
     {
-        $this->limit = 3;
-        $this->offset = 0;
+        $this->limit = config('constants.limit');
+        $this->offset = config('constants.offset');
     }
 
 

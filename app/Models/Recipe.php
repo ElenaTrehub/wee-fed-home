@@ -33,6 +33,9 @@ class Recipe extends Model
     public function steps(){
         return $this->hasMany(recipeStep::class, 'idRecipe', 'idRecipe');
     }
+    public function ingredients(){
+        return $this->hasMany(Ingredient::class, 'idRecipe', 'idRecipe');
+    }
     public function comments(){
         return $this->hasMany(Comment::class, 'idRecipe', 'idRecipe');
     }

@@ -199,7 +199,7 @@ class UserController extends Controller
                 // want to broadcast NewMessageNotification event
 
                 //dd(event(new NewMessageNotification($message, $user)));
-
+                \App\Events\NewMessageNotification::dispatch($message);
                 $request->session()->flash('flash_message', 'Ваше сообщение отправлено!');
                 return redirect()->back();
             }

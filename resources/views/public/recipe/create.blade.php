@@ -29,11 +29,17 @@
                                 <input id="countIngredient" type="text" class="form-control" name="countIngredient">
                             </div>
                             <div class="form-group">
-                                <label for="units">Введите единицы измерения (напимер л)</label>
-                                <input id="units" type="text" class="form-control" name="units">
+                                <label for="units">Выбирите единицы измерения</label>
+                                <select id="units" class="form-control" name="units" >
+                                    <option selected disabled>Выберите из списка</option>
+                                    @foreach($units as $unit)
+                                        <option>{{$unit->titleUnit}}</option>
+                                    @endforeach
+                                </select>
                             </div>
                             <button type="button" onclick="AddIngredient()">Добавить ингридиент</button>
                             <p id="errorIngredient" style="display: none;" class="bg-danger">Поля название ингридиента и колличество должны быть заполнены!</p>
+                            <p id="errorTitleIngredient" style="display: none;" class="bg-danger">Вы уже добавили данный ингридиент!</p>
                             <p class="second-title">Ваши ингридиенты</p>
                             <table id="ingredientTable" class="table">
                                 <thead>
@@ -81,6 +87,7 @@
                         <input id="calory" type="number" class="form-control" value="{{old('calory')}}" name="calory">
 
                     </div>
+
                     <p class="second-title">Опишите шаги приготовления</p>
                     <div class="col-md-12" style="padding: 0; ">
                         <div id="stepPlaceholder">

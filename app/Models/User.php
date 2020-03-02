@@ -46,7 +46,9 @@ class User extends Authenticatable
     public function roles(){
         return $this->belongsToMany(Role::class, 'roles_user', 'idUser', 'idRole');
     }
-
+    public function services(){
+        return $this->belongsToMany(Service::class, 'services_users', 'idUser', 'idService')->withPivot('sum');
+    }
 
     public function likeRecipes(){
         return $this->belongsToMany(Recipe::class, 'user_recipe_like', 'idUser', 'idRecipe');
@@ -96,7 +98,22 @@ class User extends Authenticatable
     public function takeMessages(){
         return $this->hasMany(Message::class, 'idTaker', 'id');
     }
+    public function specialties(){
+        return $this->hasMany(Specialty::class, 'idUser', 'id');
+    }
 
+    public function doctorInfo()
+    {
+        return $this->hasOne(DoctorInfo::class, 'idUser', 'id');
+    }
+
+    public function likeDoctors(){
+        return $this->belongsToMany(DoctorInfo::class, 'user_doctor_like', 'idUser', 'idDoctorInfo');
+    }
+
+    public function dislikeDoctors(){
+        return $this->belongsToMany(DoctorInfo::class, 'user_doctor_dislike', 'idUser', 'idDoctorInfo');
+    }
     public function takeNoReadMessagesFromAdmin(){
 
         $roleAdmin = Role::where('idRole', 3)->first();

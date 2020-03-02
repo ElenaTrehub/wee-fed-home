@@ -29,6 +29,7 @@ class AuthServiceProvider extends ServiceProvider
         CookerBook::class=>CookerBookPolicy::class,
         User::class=>UserPolicy::class,
         Message::class=>MessagePolicy::class
+
         // 'App\Model' => 'App\Policies\ModelPolicy',
     ];
 

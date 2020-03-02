@@ -23,7 +23,7 @@ class NewMessageNotification implements ShouldBroadcastNow
 
     public function broadcastOn()
     {
-        return new PrivateChannel('test');
+        return new PrivateChannel('room.'. $this->message->idTaker);
     }
 
 }

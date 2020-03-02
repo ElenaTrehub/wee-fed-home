@@ -45,11 +45,19 @@ Route::post('/send-message-admin', 'UserController@sendMessageAdmin')->name('sen
 Route::get('/message-delete/{message}', 'UserController@messageDelete')->name('message-delete');
 
 Route::get('/nutritionist-conditions', 'NutritionistController@showCondition')->name('nutritionist-conditions');
+Route::get('/nutritionist-resume', 'NutritionistController@showResume')->name('nutritionist-resume');
+Route::post('/resume-send', 'NutritionistController@resumeSend')->name('resume-send');
+Route::get('/doctor-list', 'NutritionistController@doctorListShow')->name('doctor-list');
 
 
-Route::get('/broadcast', function() {
-   \App\Events\NewMessageNotification::dispatch('Test message!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
-    //event(new \App\Events\NewMessageNotification('Test message'));
-//dd(new \App\Events\NewMessageNotification('Test message'));
-    return view('welcome');
-});
+Route::get('/admin-panel', 'AdminController@showAdminPanel')->name('admin-panel');
+Route::get('/user-block/{user}', 'AdminController@userBlock')->name('user-block');
+Route::get('/user-unlock/{user}', 'AdminController@userUnlock')->name('user-unlock');
+Route::get('/admin-show-more-users', 'AdminController@moreUsers')->name('admin-show-more-users');
+
+Route::get('/categories', 'AdminController@showCategories')->name('categories');
+Route::get('/add-category', 'AdminController@addCategory')->name('add-category');
+Route::get('/category-edit/{category}', 'AdminController@editCategory')->name('category-edit');
+Route::get('/category-delete/{category}', 'AdminController@deleteCategory')->name('category-delete');
+Route::post('/category-store', 'AdminController@storeCategory')->name('category-store');
+Route::put('/category-update/{category}', 'AdminController@updateCategory')->name('category-update');

@@ -8,6 +8,7 @@
         <p class="second-title" style="text-align: left">Что мы предлагаем</p>
         <p style="font-size: 16px; color:#666666">1. Бесплатное размещение Вашей анкеты</p>
         <p style="font-size: 16px; color:#666666">2. Фиксированная ежемесячная плата, не зависимо от колличества клиентов, с которыми Вы работаете</p>
+        <p style="font-size: 16px; color:#666666">3. Первый месяц Вы можете работать абсолютно бесплатно</p>
         <p class="second-title" style="text-align: left">Как зарегистрироваться</p>
         <p style="font-size: 16px; color:#666666">Оформите заявку, пройдя последовательно 4 этапа:</p>
         <p style="font-size: 16px; color:#666666">а) заполните анкету,</p>
@@ -19,6 +20,7 @@
         <br>
         <input id="isYes" type="checkbox">
         <label>Я согласен (а)</label>
+        <div id="ok">Нужно соласиться с условиями</div>
         <br>
         <button id="registerButton" onclick="canRegister()" href="" class="btn btn-primary">Начать регистрацию</button>
     </div>

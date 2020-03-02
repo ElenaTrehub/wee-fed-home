@@ -35,11 +35,25 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
  window.Echo = new Echo({
      broadcaster: 'pusher',
-     key: process.env.MIX_PUSHER_APP_KEY,
-     cluster: process.env.MIX_PUSHER_APP_CLUSTER,
-     encrypted: true
+     key: 'dd6390afff618f644706',
+     cluster: 'eu',
+     encrypted: true,
+     authEndpoint: 'http://localhost:1252/laravel/well-fed-home/public/broadcasting/auth',
+     csrfToken: document.querySelector('meta[name="_token"]').getAttribute('content')
+     //auth: {
+         //headers: {
+             //'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+         //}
+     //}
  });
-window.Echo.private('test')
+
+window.Echo.private('room.11')
     .listen('NewMessageNotification', (e) => {
-        console.log(e.message);
+       //alert('Вам сообщение от администратора!');
+        let admin_link = document.getElementById('admin');
+        let mess = document.createElement("div");
+        mess.setAttribute("style", "position:absolute; top:30px; left:0; background: #ffe924;padding: 5px;\n" +
+            "border-radius: 0 10px 10px 10px; color: #4d4729;");
+        mess.textContent = 'Message!';
+        admin_link.appendChild(mess);
     });

@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Http\Requests\CreateRecipeRequest;
 use App\Models\Category;
 use App\Models\Comment;
+use App\Models\Ingredient;
 use App\Models\Recipe;
+use App\Models\Unit;
 use App\Models\User;
 use App\Models\recipeStep;
 use Illuminate\Http\Request;
@@ -19,8 +21,8 @@ class RecipeController extends Controller
     public $offset;
     public function __construct()
     {
-        $this->limit = 3;
-        $this->offset = 0;
+        $this->limit = config('constants.limit');
+        $this->offset = config('constants.offset');
     }
     /**
      * Display a listing of the resource.
@@ -43,10 +45,12 @@ class RecipeController extends Controller
 
         if($user && $user->can("create", Recipe::class)){
             $categories = Category::all();
+            $units = Unit::all();
             $steps = [];
             $context = [
                 'categories' => $categories,
-                'steps' => $steps
+                'steps' => $steps,
+                'units' => $units
             ];
             return view('public.recipe.create', $context);
         }
@@ -77,7 +81,6 @@ class RecipeController extends Controller
         $id = Recipe::insertGetId([
             'idUser' => Auth::user()->id,
             'recipeTitle' => $request->get('title'),
-            'recipeIngredients' => $request->get('ingredients'),
             'recipePhoto' => $path,
             'recipeDescription' => $request->get('description'),
             'idCategory' => $request->get('category'),
@@ -118,7 +121,54 @@ class RecipeController extends Controller
                 }
 
             }
+            if(array_key_exists('ingredients', $request->all())) {
+                $ingred = $request->get('ingredients');
+                $ingredients = mb_substr($ingred, 0, -1);
+                $ingredientArray =  explode(";", $ingredients);
 
+                foreach ($ingredientArray as $ingredient){
+
+                    $ingredientInfo =  explode("-", $ingredient);
+                    //dd($ingredientInfo);
+                    $title = trim($ingredientInfo[0]);
+
+                    if ( !isset($ingredientInfo[1])) {
+                        $ingredientInfo[1] = null;
+                    }
+                    //dd($ingredientInfo[1]);
+                    $countArray = explode(" ", trim($ingredientInfo[1]));
+                    //dd($countArray);
+                    $count =(double)trim($countArray[0]);
+
+                    if ( ! isset($countArray[1])) {
+                        $countArray[1] = null;
+                    }
+                    //dd(trim($countArray[1]));
+                    $unit = Unit::where('titleUnit', trim($countArray[1]))->first();
+//dd($unit);
+                    if($unit) {
+                        $idUnit = $unit->idUnit;
+                    }
+
+
+                    $ingredient = Ingredient::create([
+                        'titleIngredient' => $title,
+                        'count' => $count,
+                        'idRecipe' => $id,
+                        'idUnit' => $idUnit
+                    ]);
+
+                    if(!$ingredient){
+                        $request->session()->flash('flash_message', 'Не удалось сохранить рецепт!');
+                        return redirect()->back();
+                    }
+                }
+
+
+            }
+            else {
+
+            }
 
         }
         else {
@@ -141,6 +191,20 @@ class RecipeController extends Controller
         $user = json_decode($recipeUser);
         $recipeCategory = Category::findOrFail($recipe->idCategory);
         $recipeSteps = recipeStep::where('idRecipe', $id)->get();
+        $ingredients = $recipe->ingredients()->get();
+
+        $currentIngredients = [];
+        foreach($ingredients as $ingredient){
+            $unit = Unit::findOrFail($ingredient->idUnit);
+            $app = app();
+            $obj = $app->make('stdClass');
+            $obj->unit = $unit->titleUnit;
+            $obj->ingredient = $ingredient;
+            $currentIngredients[] = $obj;
+        }
+
+        $likes = $recipe->usersWhoLike()->count();
+        $dislike = $recipe->usersWhoDislike()->count();
 
         $comments = Comment::with('user')->where('idRecipe', $id)->orderBy('createdAt', 'desc')->skip($this->offset)->take($this->limit)->get();
         //dd($comments);
@@ -149,7 +213,10 @@ class RecipeController extends Controller
             'category'=>$recipeCategory,
             'user'=>$user,
             'recipeSteps'=>$recipeSteps,
-            'comments'=>$comments
+            'comments'=>$comments,
+            'likes' =>$likes,
+            'dislikes' =>$dislike,
+            'ingredients' => $currentIngredients
         ];
 //dd($context);
         return view('public.recipe.show', $context);
@@ -170,12 +237,26 @@ class RecipeController extends Controller
             $recipeSteps = recipeStep::where('idRecipe', $id)->get();
             $recipeCategory = Category::findOrFail($recipe->idCategory);
 
+            $ingredients = $recipe->ingredients()->get();
+            $currentIngredients = [];
+            $ingrString = '';
+            foreach($ingredients as $ingredient){
+                $unit = Unit::findOrFail($ingredient->idUnit);
+                $app = app();
+                $obj = $app->make('stdClass');
+                $obj->unit = $unit->titleUnit;
+                $obj->ingredient = $ingredient;
+                $currentIngredients[] = $obj;
+                $ingrString = $ingrString.$ingredient->titleIngredient.' - '.$ingredient->count.' '.$unit->titleUnit.';';
+            }
             //dd($comments);
             $context = [
                 'recipe'=>$recipe,
                 'category'=>$recipeCategory,
                 'steps'=>$recipeSteps,
-                'categories'=>$categories
+                'categories'=>$categories,
+                'ingredients' => $currentIngredients,
+                'ingredStr' => $ingrString
             ];
             return view('public.recipe.edit', $context);
         }
@@ -218,7 +299,6 @@ class RecipeController extends Controller
         if($recipe){
             $recipe->update([
                 'recipeTitle' => $request->get('title'),
-                'recipeIngredients' => $request->get('ingredients'),
                 'recipePhoto' => $path,
                 'recipeDescription' => $request->get('description'),
                 'idCategory' => $request->get('category'),
@@ -261,6 +341,59 @@ class RecipeController extends Controller
                     }
 
                 }
+                if(array_key_exists('ingredients', $request->all())) {
+
+                    $oldIngredients = $recipe->ingredients()->get();
+                    foreach($oldIngredients as $ingredient){
+                        $ingredient->delete();
+                    }
+                    $ingred = $request->get('ingredients');
+                    $ingredients = mb_substr($ingred, 0, -1);
+                    $ingredientArray =  explode(";", $ingredients);
+
+                    foreach ($ingredientArray as $ingredient){
+
+                        $ingredientInfo =  explode("-", $ingredient);
+                        //dd($ingredientInfo);
+                        $title = trim($ingredientInfo[0]);
+
+                        if ( !isset($ingredientInfo[1])) {
+                            $ingredientInfo[1] = null;
+                        }
+                        //dd($ingredientInfo[1]);
+                        $countArray = explode(" ", trim($ingredientInfo[1]));
+                        //dd($countArray);
+                        $count =(double)trim($countArray[0]);
+
+                        if ( ! isset($countArray[1])) {
+                            $countArray[1] = null;
+                        }
+                        //dd(trim($countArray[1]));
+                        $unit = Unit::where('titleUnit', trim($countArray[1]))->first();
+//dd($unit);
+                        if($unit) {
+                            $idUnit = $unit->idUnit;
+                        }
+
+
+                        $ingredient = Ingredient::create([
+                            'titleIngredient' => $title,
+                            'count' => $count,
+                            'idRecipe' => $id,
+                            'idUnit' => $idUnit
+                        ]);
+
+                        if(!$ingredient){
+                            $request->session()->flash('flash_message', 'Не удалось сохранить рецепт!');
+                            return redirect()->back();
+                        }
+                    }
+
+
+                }
+                else {
+
+                }
             }
             else{
                 return redirect()->back();
@@ -295,16 +428,16 @@ class RecipeController extends Controller
         $recipe = Recipe::findOrFail($idRecipe);
         if($user->can("like", $recipe)){
 
-            $recipe->like = $recipe->like +1;
-            $recipe->save();
+            //$recipe->like = $recipe->like +1;
+            //$recipe->save();
             $user->likeRecipes()->attach($recipe);
             $user->rating = $user->rating + 1;
             $user->save();
 
             if($user->isDislikeRecipe($idRecipe)){
                 $user->dislikeRecipes()->detach($recipe);
-                $recipe->dislike = $recipe->dislike -1;
-                $recipe->save();
+                //$recipe->dislike = $recipe->dislike -1;
+                //$recipe->save();
             }
             return redirect()->back();
         }
@@ -323,15 +456,15 @@ class RecipeController extends Controller
         $recipe = Recipe::findOrFail($idRecipe);
         if($user->can("dislike", $recipe)){
 
-            $recipe->dislike = $recipe->dislike +1;
-            $recipe->save();
+            //$recipe->dislike = $recipe->dislike +1;
+            //$recipe->save();
             $user->dislikeRecipes()->attach($recipe);
             $user->rating = $user->rating - 1;
             $user->save();
             if($user->isLikeRecipe($idRecipe)){
                 $user->likeRecipes()->detach($recipe);
-                $recipe->like = $recipe->like -1;
-                $recipe->save();
+                //$recipe->like = $recipe->like -1;
+                //$recipe->save();
             }
             return redirect()->back();
         }
@@ -348,11 +481,26 @@ class RecipeController extends Controller
             $recipes = Recipe::where('idUser', $user->id)->get();
             $recipeInfo=[];
             foreach($recipes as $recipe){
+
+                $ingredients = $recipe->ingredients()->get();
+
+                $currentIngredients = [];
+                foreach($ingredients as $ingredient){
+                    $unit = Unit::findOrFail($ingredient->idUnit);
+                    $app = app();
+                    $obj = $app->make('stdClass');
+                    $obj->unit = $unit->titleUnit;
+                    $obj->ingredient = $ingredient;
+                    $currentIngredients[] = $obj;
+                }
+
+
                 $recipeCategory = Category::findOrFail($recipe->idCategory);
                 $app = app();
                 $obj = $app->make('stdClass');
                 $obj->recipe = $recipe;
                 $obj->category = $recipeCategory;
+                $obj->ingredients = $currentIngredients;
                 $recipeInfo[]=$obj;
             }
 
@@ -379,10 +527,23 @@ class RecipeController extends Controller
             //dd($recipe->cookerBooks()->count());
             if($recipe->cookerBooks()->count() === 0){
                 $comments = Comment::where('idRecipe', $idRecipe)->get();
-                foreach ($comments as $comment){
-                    $comment->delete();
+                $ingredients = Ingredient::where('idRecipe', $idRecipe)->get();
+                $steps = recipeStep::where('idRecipe', $idRecipe)->get();
+                if($comments){
+                    foreach ($comments as $comment){
+                        $comment->delete();
+                    }
                 }
-
+                if($ingredients){
+                    foreach ($ingredients as $ingredient){
+                        $ingredient->delete();
+                    }
+                }
+                if($steps){
+                    foreach ($steps as $step){
+                        $step->delete();
+                    }
+                }
                 $recipe->delete();
                 $request->session()->flash('flash_message', 'Рецепт удален!');
                 return redirect()->back();

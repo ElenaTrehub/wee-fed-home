@@ -1,4 +1,5 @@
 "use strict"
+
 let limit = 3;
 let offset = 0;
 function showMoreComments() {

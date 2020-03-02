@@ -96,43 +96,77 @@
                     </div>
                     <div class="logo-diet">
                         <img src={{asset('storage/uploads/doctor.png')}}>
-                        <a class='btn btn-default nutritionist' href='#'>Диетологи</a>
+                        <a class='btn btn-default nutritionist' href='{{route('doctor-list')}}'>Диетологи</a>
                     </div>
                 </div>
 
 
             </div>
         </div>
-        <nav class="menu">
-            <div class="container">
-                <ul>
-                    <li style="position: relative"><a href="{{route('personal-show')}}">Личный кабинет</a>
-                        @if(\Illuminate\Support\Facades\Auth::user() != null)
-                        @if(count(\Illuminate\Support\Facades\Auth::user()->takeNoReadMessagesFromAdmin())>0)
-                            <div style="position:absolute; top:30px; left:0; background: #ffe924;padding: 5px;
-border-radius: 0 10px 10px 10px; color: #4d4729;">
-                                Message!
-                            </div>
-                        @endif
-                        @endif
-                    </li>
 
-                    <li><a href="{{route('cooker-book-show')}}">Кулинарная книга</a></li>
-                    <li><a href="">Подписки</a></li>
-                    <li><a href="">Подписчики</a></li>
-                    <li><a href="{{route('own-recipe-show')}}">Мои рецепты</a></li>
-                    <li><a href="{{route('nutritionist-conditions')}}">Диетологам</a></li>
-                </ul>
-            </div>
-        </nav>
+        @if(\Illuminate\Support\Facades\Auth::user() != null && \Illuminate\Support\Facades\Auth::user()->hasRole(3))
+                <nav class="menu">
+                    <div class="container">
+                        <ul>
+                            <li><a href="{{route('admin-panel')}}">Админпанель</a></li>
+                            <li><a href="{{route('categories')}}">Категории</a></li>
+                            <li><a href="">Единицы измерений</a></li>
+                            <li><a href="">Диетологи</a></li>
+                        </ul>
+                    </div>
+                </nav>
+
+        @else
+            <nav class="menu">
+                <div class="container">
+                    <ul>
+                        <li><a href="{{route('home')}}">Главная</a></li>
+                        <li id="admin" style="position: relative"><a href="{{route('personal-show')}}">Личный кабинет</a>
+                            @if(\Illuminate\Support\Facades\Auth::user() != null)
+                            @if(count(\Illuminate\Support\Facades\Auth::user()->takeNoReadMessagesFromAdmin())>0)
+                                <div style="position:absolute; top:30px; left:0; background: #ffe924;padding: 5px;
+    border-radius: 0 10px 10px 10px; color: #4d4729;">
+                                    Message!
+                                </div>
+                            @endif
+                            @endif
+                        </li>
+
+                        <li><a href="{{route('cooker-book-show')}}">Кулинарная книга</a></li>
+                        <li><a href="">Подписки</a></li>
+                        <li><a href="">Подписчики</a></li>
+                        <li><a href="{{route('own-recipe-show')}}">Мои рецепты</a></li>
+                        <li><a href="{{route('nutritionist-conditions')}}">Диетологам</a></li>
+
+
+                    </ul>
+                </div>
+            </nav>
+        @endif
         <main class="py-4">
             @yield('content')
         </main>
         <footer>
+            @if(\Illuminate\Support\Facades\Auth::user() != null && \Illuminate\Support\Facades\Auth::user()->hasRole(3))
+                <nav class="menu">
+                    <div class="container">
+                        <ul>
+                            <li><a href="{{route('admin-panel')}}">Админпанель</a></li>
+                            <li><a href="{{route('categories')}}">Категории</a></li>
+                            <li><a href="">Единицы измерений</a></li>
+                            <li><a href="">Диетологи</a></li>
+                        </ul>
+                    </div>
+                </nav>
+
+            @else
             <nav class="menu">
                 <div class="container">
                     <ul>
-                        <li><a href="{{route('personal-show')}}">Личный кабинет</a></li>
+                        <li><a href="{{route('home')}}">Главная</a></li>
+                        <li id="admin" style="position: relative"><a href="{{route('personal-show')}}">Личный кабинет</a>
+
+                        </li>
                         <li><a href="{{route('cooker-book-show')}}">Кулинарная книга</a></li>
                         <li><a href="">Подписки</a></li>
                         <li><a href="">Подписчики</a></li>
@@ -141,6 +175,7 @@ border-radius: 0 10px 10px 10px; color: #4d4729;">
                     </ul>
                 </div>
             </nav>
+            @endif
         </footer>
     </div>
 

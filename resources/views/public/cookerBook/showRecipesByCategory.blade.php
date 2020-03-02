@@ -5,9 +5,10 @@
 <meta name="_token" content="{!! csrf_token() !!}">
 @section('content')
 
-    @include("partial.error")
-    @include("partial.success")
+
     <div class="container">
+        @include("partial.error")
+        @include("partial.success")
         <div class="recipe-list" >
             <p class="main-title">Кулинарная книга ( {{$category->categoryTitle}} )</p>
             @foreach($recipes as $recipe)
@@ -21,7 +22,7 @@
                         <div class="user-content">
                             <div class="user-photo">
                                 @if (isset($recipe->user->userPhoto))
-                                    <img src={{asset($recipe->user->userPhoto)}}>
+                                    <img src={{asset('storage/'.$recipe->user->userPhoto)}}>
                                 @else
                                     <img src={{asset('storage/uploads/user-default.png')}}>
                                 @endif

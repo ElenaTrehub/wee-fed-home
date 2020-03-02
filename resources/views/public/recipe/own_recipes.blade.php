@@ -27,7 +27,11 @@
                         @endif
                     </td>
                     <td>{{$recipe->category->categoryTitle}}</td>
-                    <td>{{$recipe->recipe->recipeIngredients}}</td>
+                    <td>
+                        @foreach ($recipe->ingredients as $ingredient)
+                            {{$ingredient->ingredient->titleIngredient}} - {{$ingredient->ingredient->count}} {{$ingredient->unit}};
+                        @endforeach
+                    </td>
                     <td>{{Str::limit($recipe->recipe->recipeDescription, 90)}}</td>
                     <td ><a href="{{route('recipe.edit', ['idRecipe' => $recipe->recipe->idRecipe])}}" class="btn btn-primary" style="color:#ffffff">Edit</a></td>
                     <td><a href="{{route('own-recipe-delete', ['idRecipe' => $recipe->recipe->idRecipe])}}" class="btn btn-danger" style="color:#ffffff">Delete</a></td>

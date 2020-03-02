@@ -14,8 +14,11 @@ function AddIngredient(){
 
     let title = document.getElementById('titleIngredient').value;
     let count = document.getElementById('countIngredient').value;
-    let unit = document.getElementById('units').value;
+    let unitsSelect = document.getElementById('units');
+    let selectedOption = unitsSelect.options[unitsSelect.selectedIndex];
+    let unit = selectedOption.text;
     let error = document.getElementById('errorIngredient');
+    let errorTitle = document.getElementById('errorTitleIngredient');
 
     document.getElementById('titleIngredient').value = "";
     document.getElementById('countIngredient').value = "";
@@ -23,10 +26,21 @@ function AddIngredient(){
     //console.log(title);
     if(title === '' || count ===''){
         error.style.display = 'block';
+        return;
     }
     else{
         error.style.display = 'none';
         let strIngredient = title + " - " + count + " " + unit + ";";
+
+        for(let i=0; i<ingredients.length; i++){
+            if(ingredients[i].indexOf(title, 0)!==-1){
+                errorTitle.style.display = 'block';
+                return;
+            }
+        }
+
+
+        errorTitle.style.display = 'none';
         ingredients.push(strIngredient);
 
         let sendField = document.getElementById('ingredients');

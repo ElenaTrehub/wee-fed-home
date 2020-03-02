@@ -7,11 +7,13 @@ use App\Models\Category;
 use App\Models\Recipe;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Config;
 class HomeController extends Controller
 {
 
     public $limit;
     public $offset;
+
     /**
      * Create a new controller instance.
      *
@@ -19,8 +21,12 @@ class HomeController extends Controller
      */
     public function __construct()
     {
-        $this->limit = 3;
-        $this->offset = 0;
+
+        $this->limit = config('constants.limit');
+        $this->offset = config('constants.offset');
+
+        //$this->limit = 3;
+        //$this->offset = 0;
     }
 
     /**
@@ -30,6 +36,8 @@ class HomeController extends Controller
      */
     public function index()
     {
+
+        //dd($this->limit);
         $categories = Category::all();
 
 
@@ -37,11 +45,15 @@ class HomeController extends Controller
 
         $recipeInfo=[];
         foreach($recipes as $recipe){
+            $likes = $recipe->usersWhoLike()->count();
+            $dislike = $recipe->usersWhoDislike()->count();
             $recipeUser = User::findOrFail($recipe->idUser)->toJson();
             $user = json_decode($recipeUser);
             $recipeCategory = Category::findOrFail($recipe->idCategory);
             $app = app();
             $obj = $app->make('stdClass');
+            $obj->likes = $likes;
+            $obj->dislikes = $dislike;
             $obj->recipe = $recipe;
             $obj->user = $user ;
             $obj->category = $recipeCategory;

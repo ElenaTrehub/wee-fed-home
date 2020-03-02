@@ -59488,12 +59488,24 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 window.Pusher = __webpack_require__(/*! pusher-js */ "./node_modules/pusher-js/dist/web/pusher.js");
 window.Echo = new laravel_echo__WEBPACK_IMPORTED_MODULE_0__["default"]({
   broadcaster: 'pusher',
-  key: "dd6390afff618f644706",
-  cluster: "eu",
-  encrypted: true
+  key: 'dd6390afff618f644706',
+  cluster: 'eu',
+  encrypted: true,
+  authEndpoint: 'http://localhost:1252/laravel/well-fed-home/public/broadcasting/auth',
+  csrfToken: document.querySelector('meta[name="_token"]').getAttribute('content') //auth: {
+  //headers: {
+  //'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+  //}
+  //}
+
 });
-window.Echo["private"]('test').listen('NewMessageNotification', function (e) {
-  console.log(e.message);
+window.Echo["private"]('room.11').listen('NewMessageNotification', function (e) {
+  //alert('Вам сообщение от администратора!');
+  var admin_link = document.getElementById('admin');
+  var mess = document.createElement("div");
+  mess.setAttribute("style", "position:absolute; top:30px; left:0; background: #ffe924;padding: 5px;\n" + "border-radius: 0 10px 10px 10px; color: #4d4729;");
+  mess.textContent = 'Message!';
+  admin_link.appendChild(mess);
 });
 
 /***/ }),
