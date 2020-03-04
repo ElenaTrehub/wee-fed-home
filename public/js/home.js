@@ -58,7 +58,7 @@ function MoreRecipe(offset, limit) {
                     if (data.recipes[i].user.userPhoto) {
                         userPfoto ='storage/'+ data.recipes[i].user.userPhoto;
                     } else {
-                        userPfoto = "/storage/uploads/user-default.png";
+                        userPfoto = "storage/uploads/user-default.png";
                     }
                     let recipePfoto;
                     if (data.recipes[i].recipe.recipePhoto) {
@@ -115,11 +115,11 @@ function MoreRecipe(offset, limit) {
                         '<div class="recipe-ratio">' +
                         '<div class="recipe-like">' +
                         '<img src="storage/uploads/like.png">' +
-                        data.recipes[i].recipe.like +
+                        data.recipes[i].likes +
                         '</div>' +
                         '<div class="recipe-dislike">' +
                         '<img src="storage/uploads/dislike.png">' +
-                        data.recipes[i].recipe.dislike +
+                        data.recipes[i].dislikes +
                         '</div>' +
                         '</div>' +
                         '</div>';
@@ -127,7 +127,7 @@ function MoreRecipe(offset, limit) {
                     strRecipeList += strRecipe;
                 }
 
-                //console.log(strRecipeList);
+                console.log(strRecipeList);
 
                 $('.recipe-list').append(strRecipeList);
             }

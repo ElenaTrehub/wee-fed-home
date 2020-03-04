@@ -146,7 +146,7 @@
 
                 </div>
                 <div class="add-recipe-button">
-                    <input id="showMoreComment" onclick="showMoreComments()" value="Больше комментариев" class="btn btn-success">
+                    <input id="showMoreComment" onclick="showMoreComments({{$recipe->idRecipe}})" value="Больше комментариев" class="btn btn-success">
                 </div>
             </div>
 

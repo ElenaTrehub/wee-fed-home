@@ -1,10 +1,6 @@
 @extends('layouts.app')
 
 @section('content')
-    @push('scripts')
-        <script src="{{asset('js/recipe.js')}}"></script>
-
-    @endpush
 
     <div class="container">
         @include("partial.error")

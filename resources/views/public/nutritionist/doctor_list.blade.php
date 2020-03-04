@@ -1,5 +1,7 @@
 @extends('layouts.app')
-
+@push('scripts')
+    <script src="{{asset('js/nutritionist.js')}}"></script>
+@endpush
 <meta name="_token" content="{!! csrf_token() !!}">
 @section('content')
 
@@ -50,14 +52,14 @@
 
                         <label>О себе:</label>
                         <p class="info">{{Str::limit($doctor->doctorInfo->description, 90)}}</p>
-                        <a href="#">Подробнее...</a>
+                        <a href="{{route('nutritionist-info', ['id' => $doctor->doctorInfo->idDoctorInfo])}}">Подробнее...</a>
                     </div>
 
                 </div>
             @endforeach
         </div>
         <div class="add-recipe-button">
-            <input id="showMore"  value="Больше рецептов" class="btn btn-success">
+            <input id="showMoreNutritionist" onclick="moreNutritionist()"  value="Больше специалистов" class="btn btn-success">
         </div>
     </div>
 

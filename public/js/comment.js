@@ -2,21 +2,21 @@
 
 let limit = 3;
 let offset = 0;
-function showMoreComments() {
+function showMoreComments(idRecipe) {
 
     offset = offset + limit;
 
-    console.log(offset);
-    console.log(limit);
+    //console.log(offset);
+   //console.log(limit);
    // let idRecipe = $('#idRecipe').value;
-    //console.log($('#idRecipe').value);
+    //console.log(idRecipe);
     $.ajax({
 
         url: 'http://localhost:1252/laravel/well-fed-home/public/recipe-comments',
 
         type: "GET",
 
-        data: {limit: limit, offset: offset},
+        data: {limit: limit, offset: offset, idRecipe: idRecipe },
 
         headers: {
 

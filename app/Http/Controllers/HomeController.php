@@ -78,11 +78,15 @@ class HomeController extends Controller
         if(count($recipes) > 0 ) {
             $recipeInfo = [];
             foreach ($recipes as $recipe) {
+                $likes = $recipe->usersWhoLike()->count();
+                $dislike = $recipe->usersWhoDislike()->count();
                 $recipeUser = User::findOrFail($recipe->idUser)->toJson();
                 $user = json_decode($recipeUser);
                 $recipeCategory = Category::findOrFail($recipe->idCategory);
                 $app = app();
                 $obj = $app->make('stdClass');
+                $obj->likes = $likes;
+                $obj->dislikes = $dislike;
                 $obj->recipe = $recipe;
                 $obj->user = $user;
                 $obj->category = $recipeCategory;

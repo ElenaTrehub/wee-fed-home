@@ -18,7 +18,7 @@ class UserController extends Controller
 
     }
 
-    public function personalShow(){
+    public function personalShow(Request $request){
 
         $user = Auth::user();
 
@@ -46,6 +46,10 @@ class UserController extends Controller
             return view('public.user.personal', $context);
         }
         else{
+            if($user && $user->hasStatus(2)){
+                $request->session()->flash('flash_message', 'Ваша учетная запись заблокирована! Обратитесь к администратору! ');
+                return redirect()->back();
+            }
             return view('auth.login');
         }
 
@@ -81,6 +85,10 @@ class UserController extends Controller
             }
         }
         else{
+            if($user && $user->hasStatus(2)){
+                $request->session()->flash('flash_message', 'Ваша учетная запись заблокирована! Обратитесь к администратору! ');
+                return redirect()->back();
+            }
             return view('auth.login');
         }
     }//userChangeName
@@ -114,6 +122,10 @@ class UserController extends Controller
             }
         }
         else{
+            if($user && $user->hasStatus(2)){
+                $request->session()->flash('flash_message', 'Ваша учетная запись заблокирована! Обратитесь к администратору! ');
+                return redirect()->back();
+            }
             return view('auth.login');
         }
     }//userChangeEmail
@@ -164,6 +176,10 @@ class UserController extends Controller
             }
         }
         else{
+            if($user && $user->hasStatus(2)){
+                $request->session()->flash('flash_message', 'Ваша учетная запись заблокирована! Обратитесь к администратору! ');
+                return redirect()->back();
+            }
             return view('auth.login');
         }
     }//userChangeEmail

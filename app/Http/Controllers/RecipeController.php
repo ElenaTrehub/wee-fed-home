@@ -39,7 +39,7 @@ class RecipeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
         $user = Auth::user();
 
@@ -55,6 +55,10 @@ class RecipeController extends Controller
             return view('public.recipe.create', $context);
         }
         else{
+            if($user && $user->hasStatus(2)){
+                $request->session()->flash('flash_message', 'Ваша учетная запись заблокирована! Обратитесь к администратору! ');
+                return redirect()->back();
+            }
             return view('auth.login');
         }
 
@@ -228,7 +232,7 @@ class RecipeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Request $request, $id)
     {
         $user = Auth::user();
         $recipe = Recipe::findOrFail($id);
@@ -261,6 +265,10 @@ class RecipeController extends Controller
             return view('public.recipe.edit', $context);
         }
         else{
+            if($user && $user->hasStatus(2)){
+                $request->session()->flash('flash_message', 'Ваша учетная запись заблокирована! Обратитесь к администратору! ');
+                return redirect()->back();
+            }
             return view('auth.login');
         }
     }
@@ -474,7 +482,7 @@ class RecipeController extends Controller
         }
     }
 
-    public function showOwnRecipe(){
+    public function showOwnRecipe(Request $request){
         $user = Auth::user();
 
         if($user && $user->can("create", Recipe::class)){
@@ -510,6 +518,10 @@ class RecipeController extends Controller
             return view('public.recipe.own_recipes', $context);
         }
         else{
+            if($user && $user->hasStatus(2)){
+                $request->session()->flash('flash_message', 'Ваша учетная запись заблокирована! Обратитесь к администратору! ');
+                return redirect()->back();
+            }
             return view('auth.login');
         }
 

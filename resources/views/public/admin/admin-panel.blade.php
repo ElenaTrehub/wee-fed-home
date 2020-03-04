@@ -7,12 +7,12 @@
 @section('content')
 
     <div class="container">
-    @include("partial.error")
-    @include("partial.success")
+        @include("partial.error")
+        @include("partial.success")
         <div class="main-title">Пользователи</div>
         <div class="user-list">
             @foreach($users as $user)
-                @if($user->isBlock === 0)
+                @if($user->idStatus === 3)
                     <div class="user-not-block">
                         <div class="user-admin-photo">
                             @if (isset($user->userPhoto))
@@ -27,9 +27,18 @@
                         </div>
                         <div class="user-admin-email">
                             {{$user->email}}
+                            @if(count($user->takeNoReadMessagesToAdmin())>0)
+                                <label style="margin-left:20px; background: #ffe924;padding: 5px;
+    border-radius: 0 10px 10px 10px; color: #4d4729;">
+                                    Message!
+                                </label>
+                            @endif
                         </div>
+
                         <div class="user-admin-button">
+
                             <a href="{{route('user-block', ['id' => $user->id])}}" class="btn btn-danger">Block</a>
+                            <a href="{{route('user-admin-message', ['id' => $user->id])}}" style="margin-left: 10px" class="btn btn-primary">Сообщения</a>
                         </div>
                     </div>
                 @else
@@ -46,9 +55,17 @@
                         </div>
                         <div class="user-admin-email">
                             {{$user->email}}
+                            @if(count($user->takeNoReadMessagesToAdmin())>0)
+                                <label style="margin-left:20px; background: #ffe924;padding: 5px;
+    border-radius: 0 10px 10px 10px; color: #4d4729;">
+                                    Message!
+                                </label>
+                            @endif
                         </div>
+
                         <div class="user-admin-button">
                             <a href="{{route('user-unlock', ['id' => $user->id])}}" class="btn btn-danger">Unlock</a>
+                            <a href="{{route('user-admin-message', ['id' => $user->id])}}" style="margin-left: 10px" class="btn btn-primary">Сообщения</a>
                         </div>
                     </div>
                 @endif

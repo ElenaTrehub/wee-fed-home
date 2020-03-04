@@ -621,6 +621,15 @@
     padding: 20px;
     margin-bottom: 20px;
 }
+.nutritionist-info{
+    width: 100%;
+    background: #ebf1f6;
+    padding-bottom: 20px;
+}
+.nutritionist-description{
+    width: 100%;
+    padding:0 20px 20px 20px;
+}
 .info{
     font-size: 16px;
     color: #666666;
@@ -711,17 +720,17 @@
     border-radius: 30px;
 }
 .user-admin-name{
-    width: 40%;
+    width: 35%;
     font-size: 20px;
     color: #7e8341;
     font-weight: bold;
 }
 .user-admin-email{
-    width: 40%;
+    width: 35%;
     font-size: 20px;
     color: #7e8341;
     font-style: italic;
 }
 .user-admin-button{
-    width: 10%;
+    width: 20%;
 }

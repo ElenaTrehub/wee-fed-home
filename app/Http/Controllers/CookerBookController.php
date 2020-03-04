@@ -56,12 +56,16 @@ class CookerBookController extends Controller
                 }
         }//if
         else{
+            if($user && $user->hasStatus(2)){
+                $request->session()->flash('flash_message', 'Ваша учетная запись заблокирована! Обратитесь к администратору! ');
+                return redirect()->back();
+            }
             return view('auth.login');
         }
 
 
     }//addRecipe
-    public function show(){
+    public function show(Request $request){
         $user = Auth::user();
         if($user && $user->can("show", CookerBook::class)) {
             $cookerBook = CookerBook::where('idUser', $user->id)->first();
@@ -83,6 +87,10 @@ class CookerBookController extends Controller
             return view('public.cookerBook.show', $context);
         }
         else{
+            if($user && $user->hasStatus(2)){
+                $request->session()->flash('flash_message', 'Ваша учетная запись заблокирована! Обратитесь к администратору! ');
+                return redirect()->back();
+            }
             return view('auth.login');
         }
     }//show

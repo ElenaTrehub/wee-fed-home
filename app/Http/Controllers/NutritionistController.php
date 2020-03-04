@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\CreateDoctorRequest;
 use App\Models\DoctorInfo;
+use App\Models\Role;
 use App\Models\Service;
 use App\Models\Specialty;
 use App\Models\User;
@@ -15,7 +16,8 @@ class NutritionistController extends Controller
 {
     public function __construct()
     {
-
+        $this->limit = config('constants.limit');
+        $this->offset = config('constants.offset');
     }
 
     public function showCondition()
@@ -35,6 +37,10 @@ class NutritionistController extends Controller
 
         $user = Auth::user();
 
+        if($user->hasRole(2)){
+            $request->session()->flash('flash_message', 'Вы уже зарегестрированы как доктор!');
+            return redirect()->back();
+        }
         if($user && $user->can("createDoctor", User::class)){
 
             if(array_key_exists('passport', $request->all())){
@@ -87,6 +93,9 @@ class NutritionistController extends Controller
 
                             ]);
 
+                            $role = Role::where('idRole', 2)->first();
+                            $user->roles()->attach($role);
+
                             if(!$specialty){
                                 return redirect()->back();
                             }
@@ -134,6 +143,10 @@ class NutritionistController extends Controller
             return redirect()->route('home');
         }
         else{
+            if($user && $user->hasStatus(2)){
+                $request->session()->flash('flash_message', 'Ваша учетная запись заблокирована! Обратитесь к администратору! ');
+                return redirect()->back();
+            }
             return view('auth.login');
         }
 
@@ -143,11 +156,11 @@ class NutritionistController extends Controller
     }//resumeSend
 
 
-    public function doctorListShow(){
+    public function doctorListShow(Request $request){
         $user = Auth::user();
 
         if($user && $user->can("doctorList", User::class)){
-            $doctors = DoctorInfo::where('isConfirmed', '=', '1')->get();
+            $doctors = DoctorInfo::where('isConfirmed', '=', '1')->skip($this->offset)->take($this->limit)->get();
             $doctorInfo=[];
             foreach($doctors as $doctor){
                 $currentUser = User::findOrFail($doctor->idUser);
@@ -175,8 +188,92 @@ class NutritionistController extends Controller
             return view('public.nutritionist.doctor_list', $context);
         }
         else{
+            if($user && $user->hasStatus(2)){
+                $request->session()->flash('flash_message', 'Ваша учетная запись заблокирована! Обратитесь к администратору! ');
+                return redirect()->back();
+            }
             return view('auth.login');
         }
 
     }//doctorShows
+
+    public function doctorInfo($idDoctor){
+
+        $user = Auth::user();
+
+        if ($user && $user->can("doctorList", User::class)) {
+
+            $doctor = DoctorInfo::findOrFail($idDoctor);
+
+            $currentUser = User::findOrFail($doctor->idUser);
+            $user = $currentUser->toJson();
+            $user = json_decode($user);
+            $specialties = Specialty::where('idUser', $doctor->idUser)->get();
+            $services = $currentUser->services()->get();
+            $likes = $doctor->usersWhoLike()->count();
+            $dislike = $doctor->usersWhoDislike()->count();
+            $app = app();
+            $obj = $app->make('stdClass');
+            $obj->doctorInfo = $doctor;
+            $obj->user = $user ;
+            $obj->specialties = $specialties;
+            $obj->likes = $likes;
+            $obj->dislikes = $dislike;
+            $obj->services = $services;
+
+            $context = [
+                'doctor'=>$obj
+            ];
+            return view('public.nutritionist.doctorInfo', $context);
+
+        } else {
+            return view('auth.login');
+        }
+    }//doctorInfo
+
+    public function moreNutritionists(Request $request){
+        $user = Auth::user();
+
+        if ($user && $user->can("doctorList", User::class)) {
+
+            $offset = $request->input('offset');
+            $limit = $request->input('limit');
+            $doctors = DoctorInfo::where('isConfirmed', '=', 1)->skip($offset)->take($limit)->get();
+
+            if (count($doctors) > 0) {
+
+                $doctorInfo=[];
+                foreach($doctors as $doctor){
+                    $currentUser = User::findOrFail($doctor->idUser);
+                    $user = $currentUser->toJson();
+                    $user = json_decode($user);
+                    $specialties = Specialty::where('idUser', $doctor->idUser)->get();
+                    $services = $currentUser->services()->get();
+                    $likes = $doctor->usersWhoLike()->count();
+                    $dislike = $doctor->usersWhoDislike()->count();
+                    $app = app();
+                    $obj = $app->make('stdClass');
+                    $obj->doctorInfo = $doctor;
+                    $obj->user = $user ;
+                    $obj->likes = $likes;
+                    $obj->dislikes = $dislike;
+                    $obj->specialties = $specialties;
+                    $obj->services = $services;
+                    $doctorInfo[]=$obj;
+                }
+
+
+                $context = [
+                    'doctors' => $doctorInfo,
+                ];
+
+                return $context;
+            } else {
+                return 0;
+            }
+
+        } else {
+            return view('auth.login');
+        }
+    }//moreNutritionists
 }

@@ -52,6 +52,12 @@ class CommentController extends Controller
             return redirect()->back();
         }
       else{
+
+          if($user && $user->hasStatus(2)){
+              $request->session()->flash('flash_message', 'Ваша учетная запись заблокирована! Обратитесь к администратору! ');
+              return redirect()->back();
+          }
+
           return view('auth.login');
       }
 
@@ -119,7 +125,7 @@ class CommentController extends Controller
         $offset = $request->input('offset');
         $limit = $request->input('limit');
         //dd($offset);
-        $comments = Comment::with('user')->orderBy('createdAt', 'desc')->skip($offset)->take($limit)->get();
+        $comments = Comment::where('idRecipe', $request->input('idRecipe'))->with('user')->orderBy('createdAt', 'desc')->skip($offset)->take($limit)->get();
         if(count($comments)>0){
             $context = [
                 'comments'=>$comments

@@ -48,6 +48,8 @@ Route::get('/nutritionist-conditions', 'NutritionistController@showCondition')->
 Route::get('/nutritionist-resume', 'NutritionistController@showResume')->name('nutritionist-resume');
 Route::post('/resume-send', 'NutritionistController@resumeSend')->name('resume-send');
 Route::get('/doctor-list', 'NutritionistController@doctorListShow')->name('doctor-list');
+Route::get('/nutritionist-info/{doctor}', 'NutritionistController@doctorInfo')->name('nutritionist-info');
+Route::get('/more-nutritionist', 'NutritionistController@moreNutritionists')->name('more-nutritionist');
 
 
 Route::get('/admin-panel', 'AdminController@showAdminPanel')->name('admin-panel');
@@ -61,3 +63,25 @@ Route::get('/category-edit/{category}', 'AdminController@editCategory')->name('c
 Route::get('/category-delete/{category}', 'AdminController@deleteCategory')->name('category-delete');
 Route::post('/category-store', 'AdminController@storeCategory')->name('category-store');
 Route::put('/category-update/{category}', 'AdminController@updateCategory')->name('category-update');
+
+
+Route::get('/units', 'AdminController@showUnits')->name('units');
+Route::get('/add-unit', 'AdminController@addUnit')->name('add-unit');
+Route::get('/unit-edit/{unit}', 'AdminController@editUnit')->name('unit-edit');
+Route::get('/unit-delete/{unit}', 'AdminController@deleteUnit')->name('unit-delete');
+Route::post('/unit-store', 'AdminController@storeUnit')->name('unit-store');
+Route::put('/unit-update/{unit}', 'AdminController@updateUnit')->name('unit-update');
+
+
+Route::get('/user-admin-message/{user}', 'AdminController@showUserAdminMessage')->name('user-admin-message');
+Route::post('/send-message-from-admin', 'AdminController@sendMessageFromAdmin')->name('send-message-from-admin');
+Route::get('/admin-message', 'AdminController@showMoreMessages')->name('admin-message');
+
+
+Route::get('/admin-nutritionist', 'AdminController@adminNutritionist')->name('admin-nutritionist');
+Route::get('/nutritionist-application', 'AdminController@applicationNutritionist')->name('nutritionist-application');
+Route::get('/admin-nutritionist-info/{doctor}', 'AdminController@adminDoctorInfo')->name('admin-nutritionist-info');
+Route::get('/admin-nutritionist-block/{doctor}', 'AdminController@adminDoctorBlock')->name('admin-nutritionist-block');
+Route::get('/admin-nutritionist-unlock/{doctor}', 'AdminController@adminDoctorUnlock')->name('admin-nutritionist-unlock');
+Route::get('/admin-show-more-nutritionist', 'AdminController@moreNutritionists')->name('admin-show-more-nutritionist');
+Route::get('/admin-show-more-application', 'AdminController@moreApplication')->name('admin-show-more-application');

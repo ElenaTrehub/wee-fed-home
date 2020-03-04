@@ -106,12 +106,22 @@
 
         @if(\Illuminate\Support\Facades\Auth::user() != null && \Illuminate\Support\Facades\Auth::user()->hasRole(3))
                 <nav class="menu">
-                    <div class="container">
-                        <ul>
-                            <li><a href="{{route('admin-panel')}}">Админпанель</a></li>
+                    <div class="container" >
+                        <ul >
+                            <li  id="admin" style="position: relative"><a href="{{route('admin-panel')}}">Админпанель</a>
+                                @if(\Illuminate\Support\Facades\Auth::user() != null)
+                                    @if(count(\Illuminate\Support\Facades\Auth::user()->adminTakeNoReadMessages())>0)
+                                        <div style="position:absolute; top:30px; left:0; background: #ffe924;padding: 5px;
+    border-radius: 0 10px 10px 10px; color: #4d4729;">
+                                            Message!
+                                        </div>
+                                    @endif
+                                @endif
+                            </li>
                             <li><a href="{{route('categories')}}">Категории</a></li>
-                            <li><a href="">Единицы измерений</a></li>
-                            <li><a href="">Диетологи</a></li>
+                            <li><a href="{{route('units')}}">Единицы измерений</a></li>
+                            <li><a href="{{route('admin-nutritionist')}}">Диетологи</a></li>
+                            <li><a href="{{route('nutritionist-application')}}">Заявки на подтверждение</a></li>
                         </ul>
                     </div>
                 </nav>
@@ -121,15 +131,8 @@
                 <div class="container">
                     <ul>
                         <li><a href="{{route('home')}}">Главная</a></li>
-                        <li id="admin" style="position: relative"><a href="{{route('personal-show')}}">Личный кабинет</a>
-                            @if(\Illuminate\Support\Facades\Auth::user() != null)
-                            @if(count(\Illuminate\Support\Facades\Auth::user()->takeNoReadMessagesFromAdmin())>0)
-                                <div style="position:absolute; top:30px; left:0; background: #ffe924;padding: 5px;
-    border-radius: 0 10px 10px 10px; color: #4d4729;">
-                                    Message!
-                                </div>
-                            @endif
-                            @endif
+                        <li ><a href="{{route('personal-show')}}">Личный кабинет</a>
+
                         </li>
 
                         <li><a href="{{route('cooker-book-show')}}">Кулинарная книга</a></li>
@@ -137,7 +140,6 @@
                         <li><a href="">Подписчики</a></li>
                         <li><a href="{{route('own-recipe-show')}}">Мои рецепты</a></li>
                         <li><a href="{{route('nutritionist-conditions')}}">Диетологам</a></li>
-
 
                     </ul>
                 </div>
@@ -153,8 +155,9 @@
                         <ul>
                             <li><a href="{{route('admin-panel')}}">Админпанель</a></li>
                             <li><a href="{{route('categories')}}">Категории</a></li>
-                            <li><a href="">Единицы измерений</a></li>
-                            <li><a href="">Диетологи</a></li>
+                            <li><a href="{{route('units')}}">Единицы измерений</a></li>
+                            <li><a href="{{route('admin-nutritionist')}}">Диетологи</a></li>
+                            <li><a href="{{route('nutritionist-application')}}">Заявки на подтверждение</a></li>
                         </ul>
                     </div>
                 </nav>

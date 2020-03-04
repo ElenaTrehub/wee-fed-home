@@ -128,4 +128,40 @@ class User extends Authenticatable
 
         return $notReadMessages;
     }
+
+    public function takeNoReadMessagesToAdmin(){
+
+        $roleAdmin = Role::where('idRole', 3)->first();
+        $admin = $roleAdmin->users()->first();
+        $messages = $this->hasMany(Message::class, 'idSender', 'id')->get();
+        $notReadMessages = [];
+        foreach($messages as $message){
+            if($message->idTaker === $admin->id && $message->isRead===0){
+                $notReadMessages[]=$message;
+            }
+        }
+
+        return $notReadMessages;
+    }
+
+    public function adminTakeNoReadMessages(){
+
+        $roleAdmin = Role::where('idRole', 3)->first();
+        $admin = $roleAdmin->users()->first();
+        $notReadMessages = [];
+        if($this->id === $admin->id){
+            $messages = $this->hasMany(Message::class, 'idTaker', 'id')->get();
+            foreach($messages as $message){
+                if($message->idTaker === $admin->id && $message->isRead===0){
+                    $notReadMessages[]=$message;
+                }
+            }
+        }
+        else{
+            return $notReadMessages;
+        }
+
+
+        return $notReadMessages;
+    }
 }

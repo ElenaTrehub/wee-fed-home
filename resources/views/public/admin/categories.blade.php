@@ -1,5 +1,5 @@
 @extends('layouts.app')
-
+<meta name="_token" content="{!! csrf_token() !!}">
 @section('content')
 
     <div class="container">

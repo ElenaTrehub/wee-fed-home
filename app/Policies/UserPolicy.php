@@ -21,11 +21,11 @@ class UserPolicy
     }
 
     public function personal(User $user){
-        return $user->hasStatus(3) && $user->hasRole(1) || $user->hasStatus(3) && $user->hasRole(3);
+        return $user->hasStatus(3) && $user->hasRole(1);
         //});
     }
     public function sendMessageAdmin(User $user){
-        return $user->hasStatus(3) && $user->hasRole(1) || $user->hasStatus(3) && $user->hasRole(3);
+        return $user->hasStatus(3) && $user->hasRole(1) || $user->hasStatus(2) && $user->hasRole(1);
         //});
     }
 
@@ -34,7 +34,7 @@ class UserPolicy
         //});
     }
     public function doctorList(User $user){
-        return $user->hasStatus(3) && $user->hasRole(1);
+        return $user->hasStatus(3) && $user->hasRole(1) || $user->hasStatus(3) && $user->hasRole(3);
         //});
     }
 
