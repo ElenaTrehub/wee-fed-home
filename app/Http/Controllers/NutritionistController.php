@@ -20,9 +20,29 @@ class NutritionistController extends Controller
         $this->offset = config('constants.offset');
     }
 
-    public function showCondition()
+    public function showCondition(Request $request)
     {
-        return view('public.nutritionist.condition');
+        $user = Auth::user();
+        if($user){
+            if($user->hasRole(2)){
+                $request->session()->flash('flash_message', 'Вы уже зарегестрированы как доктор!');
+                return redirect()->back();
+            }
+            if($user && $user->can("createDoctor", User::class)) {
+                return view('public.nutritionist.condition');
+            }
+            else{
+                if($user && $user->hasStatus(2)){
+                    $request->session()->flash('flash_message', 'Ваша учетная запись заблокирована! Обратитесь к администратору! ');
+                    return redirect()->back();
+                }
+
+            }
+        }
+        else{
+            return view('auth.login');
+        }
+
     }//showConditions
     public function showResume()
     {
@@ -276,4 +296,57 @@ class NutritionistController extends Controller
             return view('auth.login');
         }
     }//moreNutritionists
+
+    public  function doctorLike(Request $request, $idDoctor){
+        $user = Auth::user();
+
+        if(!$user){
+            return view('auth.login');
+        }
+        $doctor = DoctorInfo::findOrFail($idDoctor);
+
+        if($user->can("likeDoctor", $doctor)){
+
+
+            $user->likeDoctors()->attach($doctor);
+            $doctor->rating = $doctor->rating + 1;
+            $doctor->save();
+            //dd($user->isDislikeDoctor($doctor));
+            if($user->isDislikeDoctor($doctor->idDoctorInfo)){
+                $user->dislikeDoctors()->detach($doctor);
+
+            }
+            return redirect()->back();
+        }
+        else{
+            $request->session()->flash('flash_message', 'Вы уже отзывались хорошо об этом специалисте!');
+            return redirect()->back();
+        }
+    }//doctorLike
+
+    public  function doctorDislike(Request $request, $idDoctor){
+        $user = Auth::user();
+//dd($user);
+        if(!$user){
+            return view('auth.login');
+        }
+        $doctor = DoctorInfo::findOrFail($idDoctor);
+        if($user->can("dislikeDoctor", $doctor)){
+
+
+            $user->dislikeDoctors()->attach($doctor);
+            $doctor->rating = $doctor->rating - 1;
+            $doctor->save();
+//dd($user->isLikeDoctor($doctor));
+            if($user->isLikeDoctor($doctor->idDoctorInfo)){
+                $user->likeDoctors()->detach($doctor);
+
+            }
+            return redirect()->back();
+        }
+        else{
+            $request->session()->flash('flash_message', 'Вы уже отзывались негативно об этом специалистеы!');
+            return redirect()->back();
+        }
+    }//doctorLike
 }

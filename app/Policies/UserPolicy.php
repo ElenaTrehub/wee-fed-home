@@ -2,6 +2,7 @@
 
 namespace App\Policies;
 
+use App\Models\DoctorInfo;
 use App\Models\Message;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
@@ -42,4 +43,11 @@ class UserPolicy
         return $user->hasStatus(3) && $user->hasRole(3);
         //});
     }
+
+    public function pay(User $user){
+        return $user->hasStatus(3) && $user->hasRole(2);
+        //});
+    }
+
+
 }

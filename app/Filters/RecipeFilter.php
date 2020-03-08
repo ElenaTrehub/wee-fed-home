@@ -33,7 +33,7 @@ class RecipeFilter{
             return 0;
         }
         else{
-            $this->builder = $this->builder->slice($this->offset, $this->limit);
+            $this->builder = array_slice($this->builder, $this->offset, $this->limit);
             //dd($this->builder);
             return $this->builder;
         }
@@ -48,23 +48,39 @@ class RecipeFilter{
     }
 
     public function category($value){
-        if(!$value) return;
-        $this->builder = $this->builder->where('idCategory', $value);
-        //dd($this->builder);
+        if($value === 'Выберите из списка') return;
+        $recipes = [];
+        foreach($this->builder as $obj){
+            if($obj->recipe->idCategory == $value){
+                $recipes[] = $obj;
+            }
+        }
+        $this->builder = $recipes;
     }
-    public function max_calory($value){
+    public function calory($value){
         if(!$value) return;
-        $this->builder = $this->builder->where('calory', '<', $value);
+        $recipesCalory = [];
+        foreach($this->builder as $obj){
+            if($obj->recipe->calory < $value){
+                $recipesCalory[] = $obj;
+            }
+        }
+        $this->builder = $recipesCalory;
     }
     public function ingr($value){
         if(!$value) return;
+        $recipesCalory = [];
+        foreach($this->builder as $obj){
+            foreach($obj->ingredients as $ingredient){
 
-        $this->builder = $this->builder->filter(function($item) use ($value){
-            if(mb_strpos($item->recipeIngredients, $value)){
-                return true;
+                if($ingredient->titleIngredient === mb_strtolower($value)){
+                    $recipesCalory[] = $obj;
+                }
+
             }
-        });
-       // $this->builder = $this->builder->where('recipeIngredients', 'REGEXP', 'makaroni\s')->slice($this->offset, $this->limit);
+        }
+        $this->builder = $recipesCalory;
+
     }
     public function limit($value){
         if(!$value) return;

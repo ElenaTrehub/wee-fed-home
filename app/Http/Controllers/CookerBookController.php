@@ -52,7 +52,7 @@ class CookerBookController extends Controller
                 } else {
                     $recipe = Recipe::findOrFail($idRecipe);
                     $cookerBook->recipes()->attach($recipe);
-                    return $this->show();
+                    return redirect('/show');
                 }
         }//if
         else{
@@ -105,9 +105,13 @@ class CookerBookController extends Controller
             foreach($recipes as $recipe){
                 $recipeUser = User::findOrFail($recipe->idUser)->toJson();
                 $user = json_decode($recipeUser);
+                $likes = $recipe->usersWhoLike()->count();
+                $dislike = $recipe->usersWhoDislike()->count();
                 $app = app();
                 $obj = $app->make('stdClass');
                 $obj->recipe = $recipe;
+                $obj->likes = $likes;
+                $obj->dislikes = $dislike;
                 $obj->user = $user ;
                 $recipeInfo[]=$obj;
             }

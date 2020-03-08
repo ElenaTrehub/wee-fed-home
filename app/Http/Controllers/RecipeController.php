@@ -134,7 +134,7 @@ class RecipeController extends Controller
 
                     $ingredientInfo =  explode("-", $ingredient);
                     //dd($ingredientInfo);
-                    $title = trim($ingredientInfo[0]);
+                    $title = mb_strtolower(trim($ingredientInfo[0]));
 
                     if ( !isset($ingredientInfo[1])) {
                         $ingredientInfo[1] = null;
@@ -439,8 +439,10 @@ class RecipeController extends Controller
             //$recipe->like = $recipe->like +1;
             //$recipe->save();
             $user->likeRecipes()->attach($recipe);
-            $user->rating = $user->rating + 1;
-            $user->save();
+
+            $recipeUser = User::findOrFail($recipe->idUser);
+            $recipeUser->rating = $user->rating + 1;
+            $recipeUser->save();
 
             if($user->isDislikeRecipe($idRecipe)){
                 $user->dislikeRecipes()->detach($recipe);
@@ -467,8 +469,9 @@ class RecipeController extends Controller
             //$recipe->dislike = $recipe->dislike +1;
             //$recipe->save();
             $user->dislikeRecipes()->attach($recipe);
-            $user->rating = $user->rating - 1;
-            $user->save();
+            $recipeUser = User::findOrFail($recipe->idUser);
+            $recipeUser->rating = $user->rating - 1;
+            $recipeUser->save();
             if($user->isLikeRecipe($idRecipe)){
                 $user->likeRecipes()->detach($recipe);
                 //$recipe->like = $recipe->like -1;

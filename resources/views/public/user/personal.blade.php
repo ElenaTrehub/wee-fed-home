@@ -68,6 +68,9 @@
                 </form>
             </div>
             <div class="col-md-4">
+                @if($user->hasRole(2))
+                    <a class="btn btn-danger" href="{{route('pay-form', ['id' => $user->id])}}">Внести оплату</a>
+                @endif
                 <nav class="personal-menu">
                     <ul>
                         <li><a href="{{route('cooker-book-show')}}">Кулинарная книга</a></li>

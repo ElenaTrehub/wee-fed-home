@@ -5,11 +5,13 @@ namespace App\Providers;
 use App\Filters\RecipeFilter;
 use App\Models\Comment;
 use App\Models\CookerBook;
+use App\Models\DoctorInfo;
 use App\Models\Message;
 use App\Models\Recipe;
 use App\Models\User;
 use App\Policies\CommentPolicy;
 use App\Policies\CookerBookPolicy;
+use App\Policies\DoctorInfoPolicy;
 use App\Policies\MessagePolicy;
 use App\Policies\RecipePolicy;
 use App\Policies\UserPolicy;
@@ -28,7 +30,8 @@ class AuthServiceProvider extends ServiceProvider
         Comment::class => CommentPolicy::class,
         CookerBook::class=>CookerBookPolicy::class,
         User::class=>UserPolicy::class,
-        Message::class=>MessagePolicy::class
+        Message::class=>MessagePolicy::class,
+        DoctorInfo::class=>DoctorInfoPolicy::class
 
         // 'App\Model' => 'App\Policies\ModelPolicy',
     ];

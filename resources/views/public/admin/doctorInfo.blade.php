@@ -69,12 +69,14 @@
                 @endif
             </div>
             @if ($doctor->doctorInfo->isConfirmed === 1))
-                <div class="add-recipe-button">
-                    <a class="btn btn-danger" href="{{route('admin-nutritionist-block', ['idDoctorInfo' => $doctor->doctorInfo->idDoctorInfo])}}">Заблокировать</a>
-                </div>
+            <div class="add-recipe-button">
+                <a class="btn btn-danger" href="{{route('admin-nutritionist-block', ['idDoctorInfo' => $doctor->doctorInfo->idDoctorInfo])}}">Заблокировать</a>
+                <a style="margin-left: 20px" class="btn btn-success" href="{{route('admin-nutritionist-delete', ['idDoctorInfo' => $doctor->doctorInfo->idDoctorInfo])}}">Удалить</a>
+            </div>
             @else
                 <div class="add-recipe-button">
                     <a class="btn btn-success" href="{{route('admin-nutritionist-unlock', ['idDoctorInfo' => $doctor->doctorInfo->idDoctorInfo])}}">Разблокировать</a>
+                    <a style="margin-left: 20px" class="btn btn-success" href="{{route('admin-nutritionist-delete', ['idDoctorInfo' => $doctor->doctorInfo->idDoctorInfo])}}">Удалить</a>
                 </div>
             @endif
 

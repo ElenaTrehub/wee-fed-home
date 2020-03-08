@@ -66,11 +66,11 @@
                     <div class="recipe-ratio">
                         <div class="recipe-like">
                             <img src={{asset('storage/uploads/like.png')}}>
-                            {{$recipe->recipe->like}}
+                            {{$recipe->likes}}
                         </div>
                         <div class="recipe-dislike">
                             <img src={{asset('storage/uploads/dislike.png')}}>
-                            {{$recipe->recipe->dislike}}
+                            {{$recipe->dislikes}}
                         </div>
                     </div>
                 </div>

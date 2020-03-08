@@ -109,20 +109,34 @@ class HomeController extends Controller
     public function recipeSearch(Request $request){
 
         $recipes = Recipe::all();
+        $recipesAll=[];
+        foreach($recipes as $recipe){
+            $app = app();
+            $obj = $app->make('stdClass');
+            $obj->recipe = $recipe;
+            $ingredients = $recipe->ingredients()->get();
+            $obj->ingredients = $ingredients;
+            $recipesAll[]=$obj;
+        }
+
         $count = Recipe::count();
-        //dd($recipes);
-        $recipesList = (new RecipeFilter($recipes, $request, $count))->apply();
+        //dd($recipesAll);
+        $recipesList = (new RecipeFilter($recipesAll, $request, $count))->apply();
         //dd($recipesList);
         if($recipesList !== 0 ){
             $recipeInfo=[];
             foreach($recipesList as $recipe){
-                $recipeUser = User::findOrFail($recipe->idUser)->toJson();
+                $recipeUser = User::findOrFail($recipe->recipe->idUser)->toJson();
+                $likes = $recipe->recipe->usersWhoLike()->count();
+                $dislike = $recipe->recipe->usersWhoDislike()->count();
                 $user = json_decode($recipeUser);
-                $recipeCategory = Category::findOrFail($recipe->idCategory);
+                $recipeCategory = Category::findOrFail($recipe->recipe->idCategory);
                 $app = app();
                 $obj = $app->make('stdClass');
-                $obj->recipe = $recipe;
+                $obj->recipe = $recipe->recipe;
                 $obj->user = $user;
+                $obj->likes = $likes;
+                $obj->dislikes = $dislike;
                 $obj->category = $recipeCategory;
                 $recipeInfo[]=$obj;
             }

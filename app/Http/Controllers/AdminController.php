@@ -666,4 +666,52 @@ class AdminController extends Controller
             return 0;
         }
     }//moreUsers
+
+
+
+    public function deleteDoctor(Request $request, $idDoctor)
+    {
+        $user = Auth::user();
+
+        if ($user && $user->can("admin", User::class)) {
+
+            $doctor = DoctorInfo::findOrFail($idDoctor);
+
+            $currentUser = User::findOrFail($doctor->idUser);
+
+            $specialties = Specialty::where('idUser', $doctor->idUser)->get();
+            $services = $currentUser->services()->get();
+            $likes = $doctor->usersWhoLike()->get();
+            $dislikes = $doctor->usersWhoDislike()->get();;
+
+            if($specialties){
+                foreach ($specialties as $specialty){
+                    $specialty->delete();
+                }
+            }
+
+            if($services){
+                foreach ($services as $service){
+                    $currentUser->services()->detach($service);
+                }
+            }
+
+            if($likes){
+                foreach ($likes as $like){
+                    $doctor->usersWhoLike()->detach($like);
+                }
+            }
+
+            if($dislikes){
+                foreach ($dislikes as $dislike){
+                    $doctor->usersWhoDislike()->detach($dislike);
+                }
+            }
+            $doctor->delete();
+            $request->session()->flash('flash_message', 'Специалист удален!');
+            return redirect('admin-panel');
+        } else {
+            return view('auth.login');
+        }
+    }//userBlock
 }

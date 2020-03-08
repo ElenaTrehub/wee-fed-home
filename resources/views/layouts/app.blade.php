@@ -136,8 +136,6 @@
                         </li>
 
                         <li><a href="{{route('cooker-book-show')}}">Кулинарная книга</a></li>
-                        <li><a href="">Подписки</a></li>
-                        <li><a href="">Подписчики</a></li>
                         <li><a href="{{route('own-recipe-show')}}">Мои рецепты</a></li>
                         <li><a href="{{route('nutritionist-conditions')}}">Диетологам</a></li>
 
@@ -171,14 +169,34 @@
 
                         </li>
                         <li><a href="{{route('cooker-book-show')}}">Кулинарная книга</a></li>
-                        <li><a href="">Подписки</a></li>
-                        <li><a href="">Подписчики</a></li>
+
                         <li><a href="{{route('own-recipe-show')}}">Мои рецепты</a></li>
                         <li><a href="{{route('nutritionist-conditions')}}">Диетологам</a></li>
                     </ul>
                 </div>
             </nav>
             @endif
+                <div class="container" >
+                    <div class="logo-container" >
+
+                    <div class="logo">
+                        <a class="navbar-brand" href="{{ url('/') }}">
+                            {{ config('app.name', 'Laravel') }}
+                        </a>
+                    </div>
+                    <div class="logo-description">
+                        <p style="text-align: right">Лучшие рецепты для всей Вашей семьи!</p>
+                        <p style="text-align: right">Помощь профессиональных диетологов!</p>
+                        <p style="text-align: right">Возможность самых смелых кулинарных экспериментов!</p>
+                    </div>
+                    </div>
+                </div>
+
+
+
+
+
+
         </footer>
     </div>
 

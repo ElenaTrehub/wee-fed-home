@@ -76,6 +76,16 @@ class User extends Authenticatable
         return $this->dislikeRecipes()->where('recipes.idRecipe', $idRecipe)->count() == 1;
     }
 
+
+    public function isLikeDoctor($idDoctor) : bool{
+        return $this->likeDoctors()->where('doctor_info.idDoctorInfo', $idDoctor)->count() > 0;
+    }
+
+    public function isDislikeDoctor($idDoctor) : bool{
+        return $this->dislikeDoctors()->where('doctor_info.idDoctorInfo', $idDoctor)->count() > 0;
+    }
+
+
     public function status(){
         return $this->belongsTo(Status::class, 'idStatus', 'idStatus');
     }

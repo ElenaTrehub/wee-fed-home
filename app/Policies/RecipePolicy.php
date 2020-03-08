@@ -2,6 +2,7 @@
 
 namespace App\Policies;
 
+use App\Models\DoctorInfo;
 use App\Models\Recipe;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
@@ -39,4 +40,6 @@ class RecipePolicy
     public function edit(User $user, Recipe $recipe){
         return ($user->id == $recipe->idUser);
     }
+
+
 }

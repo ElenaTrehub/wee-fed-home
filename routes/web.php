@@ -20,7 +20,7 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::resource('recipe', 'RecipeController');
 
 Route::get('/show-more', 'HomeController@showMoreRecipe')->name('showMoreRecipe');
-Route::post('/recipe-search', 'HomeController@recipeSearch')->name('recipe-search');
+Route::get('/recipe-search', 'HomeController@recipeSearch')->name('recipe-search');
 Route::get('/recipe-like/{recipe}', 'RecipeController@recipeLike')->name('recipe-like');
 Route::get('/recipe-dislike/{recipe}', 'RecipeController@recipeDislike')->name('recipe-dislike');
 Route::get('/own-recipe-show', 'RecipeController@showOwnRecipe')->name('own-recipe-show');
@@ -50,6 +50,12 @@ Route::post('/resume-send', 'NutritionistController@resumeSend')->name('resume-s
 Route::get('/doctor-list', 'NutritionistController@doctorListShow')->name('doctor-list');
 Route::get('/nutritionist-info/{doctor}', 'NutritionistController@doctorInfo')->name('nutritionist-info');
 Route::get('/more-nutritionist', 'NutritionistController@moreNutritionists')->name('more-nutritionist');
+Route::get('/doctor-like/{doctor}', 'NutritionistController@doctorLike')->name('doctor-like');
+Route::get('/doctor-dislike/{doctor}', 'NutritionistController@doctorDislike')->name('doctor-dislike');
+
+
+
+
 
 
 Route::get('/admin-panel', 'AdminController@showAdminPanel')->name('admin-panel');
@@ -85,3 +91,7 @@ Route::get('/admin-nutritionist-block/{doctor}', 'AdminController@adminDoctorBlo
 Route::get('/admin-nutritionist-unlock/{doctor}', 'AdminController@adminDoctorUnlock')->name('admin-nutritionist-unlock');
 Route::get('/admin-show-more-nutritionist', 'AdminController@moreNutritionists')->name('admin-show-more-nutritionist');
 Route::get('/admin-show-more-application', 'AdminController@moreApplication')->name('admin-show-more-application');
+Route::get('/admin-nutritionist-delete/{doctor}', 'AdminController@deleteDoctor')->name('admin-nutritionist-delete');
+
+Route::get('/pay-form/{user}', 'UserController@showPayForm')->name('pay-form');
+Route::get('/pay', 'UserController@pay')->name('pay');

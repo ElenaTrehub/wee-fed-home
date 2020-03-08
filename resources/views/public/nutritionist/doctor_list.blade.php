@@ -28,11 +28,11 @@
 
                         <div class="doctor-ratio">
                             <div class="doctor-like">
-                                <img src={{asset('storage/uploads/like.png')}}>
+                                <a href="{{route('doctor-like', ['idDoctor' => $doctor->doctorInfo->idDoctorInfo])}}"><img src={{asset('storage/uploads/like.png')}}></a>
                                 {{$doctor->likes}}
                             </div>
                             <div class="doctor-dislike">
-                                <img src={{asset('storage/uploads/dislike.png')}}>
+                                <a href="{{route('doctor-dislike', ['idDoctor' => $doctor->doctorInfo->idDoctorInfo])}}"><img src={{asset('storage/uploads/dislike.png')}}></a>
                                 {{$doctor->dislikes}}
                             </div>
                         </div>

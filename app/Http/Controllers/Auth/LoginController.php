@@ -41,6 +41,9 @@ class LoginController extends Controller
         if(Auth::user()->hasRole(3)){
             return url('/admin-panel');
         }
+        else{
+            return url('/home');
+        }
     }
 
 }

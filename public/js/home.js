@@ -153,18 +153,20 @@ function SearchRecipe(offset, limit) {
 //console.log(offset);
     //console.log(limit);
     let category = $('#category')[0].value;
-    //console.log(category);
+    console.log(category);
     let max_calory = $('#max_calory')[0].value;
-    //console.log(max_calory);
+    console.log(max_calory);
     let ingr = $('#ingr')[0].value;
-    //console.log(ingr);
+    console.log(ingr);
+
+
     $.ajax({
 
         url: 'recipe-search',
 
         type: "GET",
 
-        data: {category: category, max_calory: max_calory, ingr: ingr, limit: limit, offset: offset},
+        data: {category: category, calory: max_calory, ingr: ingr, limit: limit, offset: offset},
 
         headers: {
 
@@ -239,11 +241,11 @@ function SearchRecipe(offset, limit) {
                         '<div class="recipe-ratio">' +
                         '<div class="recipe-like">' +
                         '<img src="storage/uploads/like.png">' +
-                        data.recipes[i].recipe.like +
+                        data.recipes[i].likes +
                         '</div>' +
                         '<div class="recipe-dislike">' +
                         '<img src="storage/uploads/dislike.png">' +
-                        data.recipes[i].recipe.dislike +
+                        data.recipes[i].dislikes +
                         '</div>' +
                         '</div>' +
                         '</div>';
