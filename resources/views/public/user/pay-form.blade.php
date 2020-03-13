@@ -1,37 +1,41 @@
 @extends('layouts.app')
 @push('scripts')
-    <script src="https://js.stripe.com/v3/"></script>
+    {{--<script src="https://js.stripe.com/v3/"></script>
     <script type="text/javascript">
         Stripe.setPublishableKey('pk_test_KCQMasTijZDLSyaDMpkNt0RZ00ky4QnoYy');
     </script>
-    <script src="{{asset('js/pay.js')}}"></script>
+    <script src="{{asset('js/pay.js')}}"></script>--}}
 @endpush
 
-<meta name="_token" content="{!! csrf_token() !!}">
+
 @section('content')
 
     <div class="container">
         @include("partial.error")
         @include("partial.success")
 
-        <form action="{{route('pay')}}" method="GET" id="payment-form">
+        <form action="{{route('payMonth')}}" method="POST" style="width: 400px;" id="payment-form">
             {{csrf_field()}}
             <span class="payment-errors"></span>
             <div class="form-group">
-                <label>Card Number</label>
-                <input type="text" size="20" data-stripe="number">
+                <label for="number">Card Number</label>
+                <input class="form-control" id="number" type="text" size="20" data-stripe="number">
             </div>
             <div class="form-group">
-                <label>Expiration (MM/YY)</label>
-                <input type="text" size="2" data-stripe="exp_month">
-                <input type="text" size="2" data-stripe="exp_year">
+                <label style="width: 100%">Expiration (MM/YY)</label>
+                <input class="form-control" style="width: 50px; float: left; margin-right: 10px" type="text" size="2" data-stripe="exp_month">
+                <input class="form-control" style="width: 50px" type="text" size="2" data-stripe="exp_year">
             </div>
             <div class="form-group">
-                <label>CVC</label>
-                <input type="text" size="4" data-stripe="cvc">
+                <label for="number">CVC</label>
+                <input id="cvc" class="form-control" style="width: 50px" type="text" size="4" data-stripe="cvc">
+            </div>
+            <div class="form-group">
+                <label for="name">Cardholder Name</label>
+                <input class="form-control" id="name" type="text" size="20" data-stripe="name">
             </div>
             <input type="hidden" name="user" value="{{$id}}">
-            <input type="submit" class="submit" value="Submit">
+            <input class="btn btn-primary" type="submit"  value="Submit">
         </form>
 
     </div>

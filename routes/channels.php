@@ -20,3 +20,8 @@ Broadcast::channel('room.{idTaker}', function ($user, $idTaker) {
     return (int) $user->id === (int) $idTaker;
 
 });
+Broadcast::channel('message-from-admin.11.{idTaker}', function ($user, $idTaker) {
+
+    return (int) $user->id === (int) $idTaker;
+
+});

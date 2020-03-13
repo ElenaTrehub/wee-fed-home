@@ -250,50 +250,5 @@ class UserController extends Controller
         }
     }//messageDelete
 
-    public function showPayForm($id){
-        $user = Auth::user();
 
-        if($user && $user->can("pay", User::class)){
-            $context = [
-                'id'=>$id
-            ];
-            return view('public.user.pay-form', $context);
-        }
-        else{
-
-            return view('auth.login');
-        }
-    }//showPayForm
-
-    public function pay(Request $request){
-        $user = Auth::user();
-
-        if($user && $user->can("pay", User::class)){
-
-            // Устанавливаем секретный ключ
-            //Stripe::setApiKey("sk_test_2PTE7DgY08Yokj2blSrb4J5n00Dj7k4PHS");
-
-            // Забираем token из формы
-           // $token = $request->get('stripeToken');
-
-            // Создаём оплату
-            //try {
-                //$charge = Charge::create(array(
-                   // "amount" => 1, // сумма в центах
-                   // "currency" => "usd",
-                   // "source" => $token,
-                   // "description" => "Example charge"
-                //));
-
-
-
-            //} catch(\Stripe\Error\Card $e) {
-                // Платёж не прошёл
-            //}
-        }
-        else{
-
-            return view('auth.login');
-        }
-    }//showPayForm
 }

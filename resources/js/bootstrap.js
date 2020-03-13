@@ -57,3 +57,13 @@ window.Echo.private('room.11')
         mess.textContent = 'Message!';
         admin_link.appendChild(mess);
     });
+let id = document.getElementById('idUser').value;
+
+window.Echo["private"]('message-from-admin.11.' + id).listen('NewAdminMessageNotification', function (e) {
+    //alert('Вам сообщение от администратора!');
+    var admin_link = document.getElementById('user');
+    var mess = document.createElement("div");
+    mess.setAttribute("style", "position:absolute; top:30px; left:0; background: #ffe924;padding: 5px;\n" + "border-radius: 0 10px 10px 10px; color: #4d4729;");
+    mess.textContent = 'Message!';
+    admin_link.appendChild(mess);
+});

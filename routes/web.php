@@ -93,5 +93,5 @@ Route::get('/admin-show-more-nutritionist', 'AdminController@moreNutritionists')
 Route::get('/admin-show-more-application', 'AdminController@moreApplication')->name('admin-show-more-application');
 Route::get('/admin-nutritionist-delete/{doctor}', 'AdminController@deleteDoctor')->name('admin-nutritionist-delete');
 
-Route::get('/pay-form/{user}', 'UserController@showPayForm')->name('pay-form');
-Route::get('/pay', 'UserController@pay')->name('pay');
+Route::get('/pay-form/{user}', 'PayController@showPayForm')->name('pay-form');
+Route::post('/payMonth', 'PayController@pay')->name('payMonth');

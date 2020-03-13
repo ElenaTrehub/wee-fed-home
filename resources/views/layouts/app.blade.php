@@ -32,173 +32,183 @@
 
 </head>
 <body>
-    <div id="app">
-        <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
-            <div class="container">
+<div id="app">
+    <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
+        <div class="container">
+            @if(\Illuminate\Support\Facades\Auth::user())
+                <input type="hidden" id="idUser" value="{{ Auth::user()->id }}">
+            @endif
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
+                <span class="navbar-toggler-icon"></span>
+            </button>
 
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <!-- Left Side Of Navbar -->
+                <ul class="navbar-nav mr-auto">
 
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <!-- Left Side Of Navbar -->
-                    <ul class="navbar-nav mr-auto">
+                </ul>
 
-                    </ul>
-
-                    <!-- Right Side Of Navbar -->
-                    <ul class="navbar-nav ml-auto">
-                        <!-- Authentication Links -->
-                        @guest
+                <!-- Right Side Of Navbar -->
+                <ul class="navbar-nav ml-auto">
+                    <!-- Authentication Links -->
+                    @guest
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
+                        </li>
+                        @if (Route::has('register'))
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
+                                <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
                             </li>
-                            @if (Route::has('register'))
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
-                                </li>
-                            @endif
-                        @else
-                            <li class="nav-item dropdown">
-                                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                    {{ Auth::user()->name }} <span class="caret"></span>
+                        @endif
+                    @else
+                        <li class="nav-item dropdown">
+
+                            <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                                {{ Auth::user()->name }} <span class="caret"></span>
+                            </a>
+
+                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                                <a class="dropdown-item" href="{{ route('logout') }}"
+                                   onclick="event.preventDefault();
+                                                 document.getElementById('logout-form').submit();">
+                                    {{ __('Logout') }}
                                 </a>
 
-                                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="{{ route('logout') }}"
-                                       onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
-                                        {{ __('Logout') }}
-                                    </a>
-
-                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                                        @csrf
-                                    </form>
-                                </div>
-                            </li>
-                        @endguest
-                    </ul>
-                </div>
-            </div>
-        </nav>
-        <div class="logo-section">
-            <div class="container">
-                <div class="logo-container">
-                    <div class="logo">
-                        <a class="navbar-brand" href="{{ url('/') }}">
-                            {{ config('app.name', 'Laravel') }}
-                        </a>
-                    </div>
-                    <div class="logo-description">
-                        <p>Лучшие рецепты для всей Вашей семьи!</p>
-                        <p>Помощь профессиональных диетологов!</p>
-                        <p>Возможность самых смелых кулинарных экспериментов!</p>
-                    </div>
-                    <div class="logo-diet">
-                        <img src={{asset('storage/uploads/doctor.png')}}>
-                        <a class='btn btn-default nutritionist' href='{{route('doctor-list')}}'>Диетологи</a>
-                    </div>
-                </div>
-
-
+                                <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                    @csrf
+                                </form>
+                            </div>
+                        </li>
+                    @endguest
+                </ul>
             </div>
         </div>
+    </nav>
+    <div class="logo-section">
+        <div class="container">
+            <div class="logo-container">
+                <div class="logo">
+                    <a class="navbar-brand" href="{{ url('/') }}">
+                        {{ config('app.name', 'Laravel') }}
+                    </a>
+                </div>
+                <div class="logo-description">
+                    <p>Лучшие рецепты для всей Вашей семьи!</p>
+                    <p>Помощь профессиональных диетологов!</p>
+                    <p>Возможность самых смелых кулинарных экспериментов!</p>
+                </div>
+                <div class="logo-diet">
+                    <img src={{asset('storage/uploads/doctor.png')}}>
+                    <a class='btn btn-default nutritionist' href='{{route('doctor-list')}}'>Диетологи</a>
+                </div>
+            </div>
 
-        @if(\Illuminate\Support\Facades\Auth::user() != null && \Illuminate\Support\Facades\Auth::user()->hasRole(3))
-                <nav class="menu">
-                    <div class="container" >
-                        <ul >
-                            <li  id="admin" style="position: relative"><a href="{{route('admin-panel')}}">Админпанель</a>
-                                @if(\Illuminate\Support\Facades\Auth::user() != null)
-                                    @if(count(\Illuminate\Support\Facades\Auth::user()->adminTakeNoReadMessages())>0)
-                                        <div style="position:absolute; top:30px; left:0; background: #ffe924;padding: 5px;
-    border-radius: 0 10px 10px 10px; color: #4d4729;">
-                                            Message!
-                                        </div>
-                                    @endif
+
+        </div>
+    </div>
+
+    @if(\Illuminate\Support\Facades\Auth::user() != null && \Illuminate\Support\Facades\Auth::user()->hasRole(3))
+            <nav class="menu">
+                <div class="container" >
+                    <ul >
+                        <li  id="admin" style="position: relative"><a href="{{route('admin-panel')}}">Админпанель</a>
+                            @if(\Illuminate\Support\Facades\Auth::user() != null)
+                                @if(count(\Illuminate\Support\Facades\Auth::user()->adminTakeNoReadMessages())>0)
+                                    <div style="position:absolute; top:30px; left:0; background: #ffe924;padding: 5px;
+border-radius: 0 10px 10px 10px; color: #4d4729;">
+                                        Message!
+                                    </div>
                                 @endif
-                            </li>
-                            <li><a href="{{route('categories')}}">Категории</a></li>
-                            <li><a href="{{route('units')}}">Единицы измерений</a></li>
-                            <li><a href="{{route('admin-nutritionist')}}">Диетологи</a></li>
-                            <li><a href="{{route('nutritionist-application')}}">Заявки на подтверждение</a></li>
-                        </ul>
-                    </div>
-                </nav>
+                            @endif
+                        </li>
+                        <li><a href="{{route('categories')}}">Категории</a></li>
+                        <li><a href="{{route('units')}}">Единицы измерений</a></li>
+                        <li><a href="{{route('admin-nutritionist')}}">Диетологи</a></li>
+                        <li><a href="{{route('nutritionist-application')}}">Заявки на подтверждение</a></li>
+                    </ul>
+                </div>
+            </nav>
+
+    @else
+        <nav class="menu">
+            <div class="container">
+                <ul>
+                    <li ><a href="{{route('home')}}">Главная</a></li>
+                    <li id="user" style="position: relative"><a href="{{route('personal-show')}}">Личный кабинет</a>
+                        @if(\Illuminate\Support\Facades\Auth::user() != null)
+                            @if(count(\Illuminate\Support\Facades\Auth::user()->takeNoReadMessagesFromAdmin())>0)
+                                <div style="position:absolute; top:30px; left:0; background: #ffe924;padding: 5px;
+border-radius: 0 10px 10px 10px; color: #4d4729;">
+                                    Message!
+                                </div>
+                            @endif
+                        @endif
+                    </li>
+
+                    <li><a href="{{route('cooker-book-show')}}">Кулинарная книга</a></li>
+                    <li><a href="{{route('own-recipe-show')}}">Мои рецепты</a></li>
+                    <li><a href="{{route('nutritionist-conditions')}}">Диетологам</a></li>
+
+                </ul>
+            </div>
+        </nav>
+    @endif
+    <main class="py-4">
+        @yield('content')
+    </main>
+    <footer>
+        @if(\Illuminate\Support\Facades\Auth::user() != null && \Illuminate\Support\Facades\Auth::user()->hasRole(3))
+            <nav class="menu">
+                <div class="container">
+                    <ul>
+                        <li><a href="{{route('admin-panel')}}">Админпанель</a></li>
+                        <li><a href="{{route('categories')}}">Категории</a></li>
+                        <li><a href="{{route('units')}}">Единицы измерений</a></li>
+                        <li><a href="{{route('admin-nutritionist')}}">Диетологи</a></li>
+                        <li><a href="{{route('nutritionist-application')}}">Заявки на подтверждение</a></li>
+                    </ul>
+                </div>
+            </nav>
 
         @else
-            <nav class="menu">
-                <div class="container">
-                    <ul>
-                        <li><a href="{{route('home')}}">Главная</a></li>
-                        <li ><a href="{{route('personal-show')}}">Личный кабинет</a>
+        <nav class="menu">
+            <div class="container">
+                <ul>
+                    <li><a href="{{route('home')}}">Главная</a></li>
+                    <li id="admin" style="position: relative"><a href="{{route('personal-show')}}">Личный кабинет</a>
 
-                        </li>
+                    </li>
+                    <li><a href="{{route('cooker-book-show')}}">Кулинарная книга</a></li>
 
-                        <li><a href="{{route('cooker-book-show')}}">Кулинарная книга</a></li>
-                        <li><a href="{{route('own-recipe-show')}}">Мои рецепты</a></li>
-                        <li><a href="{{route('nutritionist-conditions')}}">Диетологам</a></li>
-
-                    </ul>
-                </div>
-            </nav>
+                    <li><a href="{{route('own-recipe-show')}}">Мои рецепты</a></li>
+                    <li><a href="{{route('nutritionist-conditions')}}">Диетологам</a></li>
+                </ul>
+            </div>
+        </nav>
         @endif
-        <main class="py-4">
-            @yield('content')
-        </main>
-        <footer>
-            @if(\Illuminate\Support\Facades\Auth::user() != null && \Illuminate\Support\Facades\Auth::user()->hasRole(3))
-                <nav class="menu">
-                    <div class="container">
-                        <ul>
-                            <li><a href="{{route('admin-panel')}}">Админпанель</a></li>
-                            <li><a href="{{route('categories')}}">Категории</a></li>
-                            <li><a href="{{route('units')}}">Единицы измерений</a></li>
-                            <li><a href="{{route('admin-nutritionist')}}">Диетологи</a></li>
-                            <li><a href="{{route('nutritionist-application')}}">Заявки на подтверждение</a></li>
-                        </ul>
-                    </div>
-                </nav>
+            <div class="container" >
+                <div class="logo-container" >
 
-            @else
-            <nav class="menu">
-                <div class="container">
-                    <ul>
-                        <li><a href="{{route('home')}}">Главная</a></li>
-                        <li id="admin" style="position: relative"><a href="{{route('personal-show')}}">Личный кабинет</a>
-
-                        </li>
-                        <li><a href="{{route('cooker-book-show')}}">Кулинарная книга</a></li>
-
-                        <li><a href="{{route('own-recipe-show')}}">Мои рецепты</a></li>
-                        <li><a href="{{route('nutritionist-conditions')}}">Диетологам</a></li>
-                    </ul>
+                <div class="logo">
+                    <a class="navbar-brand" href="{{ url('/') }}">
+                        {{ config('app.name', 'Laravel') }}
+                    </a>
                 </div>
-            </nav>
-            @endif
-                <div class="container" >
-                    <div class="logo-container" >
-
-                    <div class="logo">
-                        <a class="navbar-brand" href="{{ url('/') }}">
-                            {{ config('app.name', 'Laravel') }}
-                        </a>
-                    </div>
-                    <div class="logo-description">
-                        <p style="text-align: right">Лучшие рецепты для всей Вашей семьи!</p>
-                        <p style="text-align: right">Помощь профессиональных диетологов!</p>
-                        <p style="text-align: right">Возможность самых смелых кулинарных экспериментов!</p>
-                    </div>
-                    </div>
+                <div class="logo-description">
+                    <p style="text-align: right">Лучшие рецепты для всей Вашей семьи!</p>
+                    <p style="text-align: right">Помощь профессиональных диетологов!</p>
+                    <p style="text-align: right">Возможность самых смелых кулинарных экспериментов!</p>
                 </div>
+                </div>
+            </div>
 
 
 
 
 
 
-        </footer>
-    </div>
+    </footer>
+</div>
 
 
 </body>

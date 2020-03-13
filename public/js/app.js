@@ -59492,12 +59492,22 @@ window.Echo = new laravel_echo__WEBPACK_IMPORTED_MODULE_0__["default"]({
   cluster: 'eu',
   encrypted: true,
   authEndpoint: 'http://localhost:1252/laravel/well-fed-home/public/broadcasting/auth',
-  csrfToken: document.querySelector('meta[name="_token"]').getAttribute('content') //auth: {
+  scsrfToken: document.querySelector('meta[name="csrf-token"]').getAttribute('content') //auth: {
   //headers: {
   //'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
   //}
   //}
 
+});
+let id = document.getElementById('idUser').value;
+
+window.Echo["private"]('message-from-admin.11.' + id).listen('NewAdminMessageNotification', function (e) {
+    //alert('Вам сообщение от администратора!');
+    var admin_link = document.getElementById('user');
+    var mess = document.createElement("div");
+    mess.setAttribute("style", "position:absolute; top:30px; left:0; background: #ffe924;padding: 5px;\n" + "border-radius: 0 10px 10px 10px; color: #4d4729;");
+    mess.textContent = 'Message!';
+    admin_link.appendChild(mess);
 });
 window.Echo["private"]('room.11').listen('NewMessageNotification', function (e) {
   //alert('Вам сообщение от администратора!');
@@ -59507,6 +59517,7 @@ window.Echo["private"]('room.11').listen('NewMessageNotification', function (e) 
   mess.textContent = 'Message!';
   admin_link.appendChild(mess);
 });
+
 
 /***/ }),
 
@@ -59537,7 +59548,7 @@ var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_
   null,
   null,
   null
-  
+
 )
 
 /* hot reload */
@@ -59557,7 +59568,7 @@ component.options.__file = "resources/js/components/ExampleComponent.vue"
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_ExampleComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib??ref--4-0!../../../node_modules/vue-loader/lib??vue-loader-options!./ExampleComponent.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/ExampleComponent.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_ExampleComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_ExampleComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]);
 
 /***/ }),
 

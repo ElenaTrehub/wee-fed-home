@@ -181,8 +181,13 @@ class NutritionistController extends Controller
 
         if($user && $user->can("doctorList", User::class)){
             $doctors = DoctorInfo::where('isConfirmed', '=', '1')->skip($this->offset)->take($this->limit)->get();
+            $date = new \DateTime();
+            $doctorsPay = $doctors->filter(function ($item) use ($date) {
+                return (data_get($item, 'dayPay') < $date);
+            });
+
             $doctorInfo=[];
-            foreach($doctors as $doctor){
+            foreach($doctorsPay as $doctor){
                 $currentUser = User::findOrFail($doctor->idUser);
                 $user = $currentUser->toJson();
                 $user = json_decode($user);
